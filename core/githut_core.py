@@ -217,7 +217,7 @@ def loginF():
             print(cache)
             login = 1
 # Rebuild Database
-def redata(data):
+def redata():
     os_remove('.mwl-githut-data.db')
     print(language.rdata)
     cdatabase()
