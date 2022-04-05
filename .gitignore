@@ -1,4 +1,7 @@
 LICENSE
 icon.png
 icon.ico
+favicon.png
 README.md
+__pycache__
+.mwl-githut-data.db
