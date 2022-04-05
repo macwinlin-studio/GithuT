@@ -2,18 +2,20 @@
 import sqlite3,pathlib
 from os.path import isfile as os_path_isfile
 from locale import getdefaultlocale as getlanguage
+from platform import platform
+from os import popen as os_popen
 # project: GitHub Tools Language Core
 # file: language_core.py
 # author: MacWinLin Studio CGK Team
-# email: mwl@macwinlin.ml
+# email: githut@macwinlin.ml
 # version: LTS(Long Term Support) 1.0
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
 # Code
 
-# Create Database
-if not os_path_isfile('.mwl-githut-data.db'):
+# Def Create Databese
+def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER DEFAULT 0,token TEXT,account INTEGER NOT NULL DEFAULT 0,alogin INTEGER NOT NULL DEFAULT 0)")
@@ -25,6 +27,11 @@ if not os_path_isfile('.mwl-githut-data.db'):
         con.commit()
     cur.close()
     con.close()
+    if 'Windows' in platform():
+        os_popen('attrib +H .mwl-githut-data.db')
+# Create Database
+if not os_path_isfile('.mwl-githut-data.db'):
+    cdatabase()
 # Language Function
 class languageC():
     def __init__(self):
@@ -64,7 +71,8 @@ class languageC():
 githut    关于
 config    配置信息
 account   设置账号类型
-login     登录'''
+login     登录
+redata    重新生成数据库'''
             self.hToken = '请先删除Token。'
             self.nhToken = '请先添加Token。'
             self.configH = '''您可以使用这些命令：
@@ -114,7 +122,8 @@ autologin [-y/--yes | -n/--no]    更改自动登录状态'''
 githut    About
 config    Config Information
 account   Set The Account Type
-login     Login GitHub Account'''
+login     Login GitHub Account
+redata    Rebuild Database'''
             # About Token Text
             self.hToken = 'Please delete the token first.'
             self.nhToken = 'Please add the token first.'
@@ -137,3 +146,5 @@ autologin [-y/--yes | -n/--no]    Change Autologin State'''
             self.NalY = 'Please disable autologin first!'
             self.NalN = 'Please enable autologin first!'
             self.alogin = 'Autologin started!'
+            self.rdata = 'Removed database file!'
+            self.adata = 'Rebuilded database!'

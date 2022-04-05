@@ -1,16 +1,16 @@
 # coding=utf-8
 import github,sqlite3
-from os.path import realpath
-from os.path import dirname
+from os.path import realpath,dirname
 from sys import path as sys_path
 from webbrowser import open_new as web_open
 from requests import get as requests_get
+from os import remove as os_remove
 sys_path.append(dirname(realpath(__file__)))
-from language_core import languageC
+from language_core import languageC,cdatabase
 # project: GitHub Tools Core
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
-# email: mwl@macwinlin.ml
+# email: githut@macwinlin.ml
 # version: LTS(Long Term Support) 1.0
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
@@ -216,6 +216,12 @@ def loginF():
             cache += l
             print(cache)
             login = 1
+# Rebuild Database
+def redata(data):
+    os_remove('.mwl-githut-data.db')
+    print(language.rdata)
+    cdatabase()
+    print(language.adata)
 # Run Command
 def run(data):
     if data == 'help':
@@ -237,12 +243,10 @@ def run(data):
             account(get(8,data))
     elif data == 'login':
         loginF()
+    elif data == 'redata':
+        redata()
     else:
         print("'{}'".format(data) + language.notc)
-# Rebuild Database
-def redata(data):
-    pass
-
 if basic[3] == 1:
     print(language.alogin)
     loginF()
