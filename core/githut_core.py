@@ -218,10 +218,14 @@ def loginF():
             login = 1
 # Rebuild Database
 def redata():
+    global basic
+    global loginV
     os_remove('.mwl-githut-data.db')
     print(language.rdata)
     cdatabase()
     print(language.adata)
+    basic = [0,None,0,0]
+    loginV = 0
 # Run Command
 def run(data):
     if data == 'help':
