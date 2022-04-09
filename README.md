@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://s1.imagehub.cc/images/2022/04/09/favicon.png" width="160px" height="100px">
+  <img src="https://s1.imagehub.cc/images/2022/04/09/favicon.png" width="100px" height="100px">
   <h1 align="center">GithuT</h1>
   
   English | [简体中文](https://github.com/macwinlin-studio/GithuT/blob/1.0.0/README-zh.md)
