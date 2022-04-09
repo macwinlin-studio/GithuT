@@ -32,7 +32,7 @@ Then please open `shell.py` file,then you can use GithuT
 
 ## Usage
 
-Usage please go to [test repo](https://github.com/xtest2021/githut-test-repo)
+Usage please go to [test repo](https://github.com/xtest2021/githut-test-repo/README.md#usage)
 
 ## Maintainers
 
