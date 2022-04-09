@@ -28,7 +28,8 @@ But other operation?So I made this project and update.
 ## Install
 
 Please install [Python](https://www.python.org) first.
-Then please open `shell.py` file,then you can use GithuT
+
+Then please open `shell.py` file,then you can use GithuT!
 
 ## Usage
 
@@ -36,7 +37,7 @@ Usage please go to [test repo](https://github.com/xtest2021/githut-test-repo/REA
 
 ## Maintainers
 
-This project's maintainers are MacWinLin Studio CGK Team's member.
+This project's maintainers are MacWinLin Studio CGK Team's members.
 
 ## License
 
