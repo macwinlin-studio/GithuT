@@ -37,7 +37,7 @@ OK,if you want to rewrite shell,[contact us](mailto:githut@macwinlin.ml)!
 
 Really,we want Language Core to include more languages.
 
-So you can modify language core to anymore!
+So you can modify language core and publish to anymore!
 
 Then send new core to [us](mailto:githut@macwinlin.ml)!
 

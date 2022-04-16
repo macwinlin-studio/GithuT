@@ -2,7 +2,7 @@
 # project: GitHub Tools Shell
 # file: shell.py
 # author: MacWinLin Studio CGK Team
-# email: mwl@macwinlin.ml
+# email: githut@macwinlin.ml
 # version: LTS(Long Term Support) 1.0
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
