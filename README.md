@@ -8,10 +8,10 @@
     <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="">
   </a>
   <a href="https://www.microsoft.com/en-us/windows">
-    <img src="https://img.shields.io/badge/platform-windows-orange">
+    <img src="https://img.shields.io/badge/platform-windows-orange" alt="">
   </a>
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/python-v3.9-orange">
+    <img src="https://img.shields.io/badge/python-v3.9-orange" alt="">
   </a>
 </div>
 

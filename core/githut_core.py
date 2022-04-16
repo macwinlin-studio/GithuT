@@ -1,5 +1,6 @@
 # coding=utf-8
-import github,sqlite3
+import sqlite3
+from github import Github as github_Github
 from os.path import realpath,dirname
 from sys import path as sys_path
 from webbrowser import open_new as web_open
@@ -83,8 +84,9 @@ def githut(data):
     elif data in ['-l','--license']:
         try:
             requests_get('https://test.xinxin2021.tk/itest')
-        except:
+        except Exception as e:
             print(language.licenseE)
+            print(language.errorInfo + str(e))
         else:
             print(requests_get('https://githut.macwinlin.ml/LICENSE').text)
     elif data in ['-c','--copyright']:
@@ -140,29 +142,59 @@ def config(data):
     # Config Autologin
     elif data[0:9] == 'autologin':
         cache = get(10,data)
+        # Connect Database
+        con = sqlite3.connect('.mwl-githut-data.db')
+        cur = con.cursor()
+        if cache in ['-y','--yes','-n','--no']:
+            if cache == '-y' or cache == '--yes':
+                if basic[2] == 0:
+                    cur.execute("UPDATE data SET alogin=1 WHERE id=1")
+                    con.commit()
+                    basic[2] = 1
+                    print(language.alY)
+                else:
+                    print(language.NalY)
+            else:
+                if basic[2] == 1:
+                    cur.execute("UPDATE data SET alogin=0 WHERE id=1")
+                    con.commit()
+                    basic[2] = 0
+                    print(language.alN)
+                else:
+                    print(language.NalN)
+        # Command Error
+        else:
+            print(language.cerror)
+        cur.close()
+        con.close()
+    # Git Mode
+    elif data[0:3] == 'git':
+        cache = get(4,data)
+        # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
         cur = con.cursor()
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
                 if basic[3] == 0:
-                    cur.execute("UPDATE data SET alogin=1 WHERE id=1")
+                    cur.execute("UPDATE data SET gmode=1 WHERE id=1")
                     con.commit()
                     basic[3] = 1
-                    print(language.alY)
+                    print(language.gmodeY)
                 else:
-                    print(language.NalY)
+                    print(language.NgmodeY)
             else:
                 if basic[3] == 1:
-                    cur.execute("UPDATE data SET alogin=0 WHERE id=1")
+                    cur.execute("UPDATE data SET gmode=0 WHERE id=1")
                     con.commit()
                     basic[3] = 0
-                    print(language.alN)
+                    print(language.gmodeN)
                 else:
-                    print(language.NalN)
+                    print(language.NgmodeN)
         else:
             print(language.cerror)
         cur.close()
         con.close()
+    # Command Error
     else:
         print(language.cerror)
 # Set Account Type
@@ -191,31 +223,38 @@ def account(data):
         print(language.cerror)
 # Login
 def loginF():
+    # Global
     global g
     global user
     global l
-    global login
-    g = github.Github(login_or_token=basic[1])
-    if basic[2] == 1:
-        user = g.get_organization()
-    else:
-        user = g.get_user()
+    global loginV
+    # GitHub
+    g = github_Github(login_or_token=basic[1])
+    # Get User
+    user = g.get_user()
+    # Have Token
     if basic[0] == 0:
         print(language.nhToken)
     else:
+        # Login
         try:
+            # Try To Login
             l = user.login
-        except:
+        except Exception as e:
+            # Token Error
             print(language.terror)
+            print(language.errorInfo + str(e))
         else:
+            # OK
             cache = language.loginS
-            if basic[2] == 1:
-                cache += language.loginSO
-            else:
-                cache += language.loginSU
+            # Username
+            cache += language.loginSU
             cache += l
+            # Name
+            cache += language.Lname
+            cache += user.name
             print(cache)
-            login = 1
+            loginV = 1
 # Rebuild Database
 def redata():
     global basic
@@ -226,6 +265,23 @@ def redata():
     print(language.adata)
     basic = [0,None,0,0]
     loginV = 0
+# Create Repository
+def crepo(data):
+    if loginV == 1:
+        # Create Repo
+        try:
+            user.create_repo(data)
+        # Error
+        except Exception as e:
+            print(language.crepoE)
+            print(language.errorInfo + str(e))
+        # Success
+        else:
+            print(language.crepoS)
+    else:
+        print(language.ploginT)
+# 
+
 # Run Command
 def run(data):
     if data == 'help':
@@ -249,8 +305,18 @@ def run(data):
         loginF()
     elif data == 'redata':
         redata()
+    elif data[0:6] == 'create':
+        if data == 'create':
+            print(language.createH)
+        elif data[7:11] == 'repo':
+            if get(7,data) == 'repo':
+                run('create')
+            else:
+                crepo(get(12,data))
+        else:
+            print("'{}'".format(data) + language.notc)
     else:
         print("'{}'".format(data) + language.notc)
-if basic[3] == 1:
+if basic[2] == 1:
     print(language.alogin)
     loginF()

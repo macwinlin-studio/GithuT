@@ -1,5 +1,5 @@
 # coding=utf-8
-import sqlite3,pathlib
+import sqlite3
 from os.path import isfile as os_path_isfile
 from locale import getdefaultlocale as getlanguage
 from platform import platform
@@ -18,10 +18,10 @@ from os import popen as os_popen
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER DEFAULT 0,token TEXT,account INTEGER NOT NULL DEFAULT 0,alogin INTEGER NOT NULL DEFAULT 0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,gmode INTEGER NOT NULL DEFAULT 0)")
     cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0)")
     con.commit()
-    # Change Default Language,Only Support Simplified Chinese
+    # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
         cur.execute("UPDATE data SET language='zh-cn' WHERE id=1")
         con.commit()
@@ -65,20 +65,19 @@ class languageC():
 -po | --program-open 打开GitHub仓库
 -l | --license    查看开源协议
 -c | --copyright    查看版权信息'''
-            self.cerror = '命令错误。'
-            self.notc = '不是命令。'
             self.help = '''你可以使用这些命令：
+help      帮助
 githut    关于
 config    配置信息
-account   设置账号类型
 login     登录
 redata    重新生成数据库'''
             self.hToken = '请先删除Token。'
             self.nhToken = '请先添加Token。'
             self.configH = '''您可以使用这些命令：
-language <language>               更改GithuT语言
+language <language>                   更改GithuT语言
 token <github-token>              更改GitHub Token
-autologin [-y/--yes | -n/--no]    更改自动登录状态'''
+autologin [-y/--yes | -n/--no     更改自动登录状态
+git [-y/--yes | -n/--no]          更改Git模式状态'''
             self.licenseE = '无法加载协议，请确认您连接到网络。'
             self.accountH = '''您可以使用这些命令：
 -u | --user         设置账号类型为个人
@@ -87,13 +86,27 @@ autologin [-y/--yes | -n/--no]    更改自动登录状态'''
             self.isu = '账号类型已设置为个人。'
             self.terror = '无法登陆，请确认您的Token正确！'
             self.loginS = '登录成功！'
-            self.loginSO = '组织名称：'
             self.loginSU = '用户名：'
+            self.Lname = '。名称：'
             self.alY = '自动登录已启用！'
             self.alN = '自动登录已禁用！'
             self.NalY = '请先禁用自动登录！'
             self.NalN = '请先启用自动登录！'
             self.alogin = '开始自动登录！'
+            self.rdata = '已删除数据库文件！'
+            self.adata = '已重新生成数据库！'
+            self.errorInfo = '错误信息：'
+            self.ploginT = '请先登录！'
+            self.cerror = '命令错误。'
+            self.notc = '不是命令。'
+            self.createH = '''您可以使用以下命令：
+repo <RepoName>    创建GitHub仓库'''
+            self.crepoE = '新建仓库失败。'
+            self.crepoS = '仓库新建成功！'
+            self.gmodeY = 'Git模式已启用！'
+            self.gmodeN = 'Git模式已禁用！'
+            self.NgmodeY = '请先禁用Git模式！'
+            self.NgmodeN = '请先启用Git模式！'
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
@@ -115,13 +128,11 @@ autologin [-y/--yes | -n/--no]    更改自动登录状态'''
 -po | --program-open   Open GitHub Repository
 -l | --license         See This Project's License
 -c | --copyright       See This Project's Copyright'''
-            self.cerror = 'Command error.'
-            self.notc = ' is not a command.'
             # Global Helper Text
             self.help = '''You can use these command:
+help      Helper
 githut    About
 config    Config Information
-account   Set The Account Type
 login     Login GitHub Account
 redata    Rebuild Database'''
             # About Token Text
@@ -130,21 +141,42 @@ redata    Rebuild Database'''
             self.configH = '''You can use these command:
 language <language>               Change GithuT Language
 token <github-token>              Change GitHub Token
-autologin [-y/--yes | -n/--no]    Change Autologin State'''
+autologin [-y/--yes | -n/--no]    Change Autologin State
+git [-y/--yes | -n/--no]          Change Git Mode State'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
             self.accountH = '''You can use these command:
 -u | --user           Set The Account Type To Individual
 -o | --organization   Set The Account Type To Organization'''
+            # Set Account Type
             self.iso = 'The Account Type Is Set To Organization.'
             self.isu = 'The Account Type Is Set To Individual.'
+            # Login
             self.terror = 'Could\'t login,please confirm your token is right!'
             self.loginS = 'Login successful!'
-            self.loginSO = 'Username:'
-            self.loginSU = 'Organization Name:'
+            self.loginSU = 'Username:'
+            self.Lname = '.Name:'
+            # Autologin
             self.alY = 'Autologin is enable now!'
             self.alN = 'Autologin is disable now!'
             self.NalY = 'Please disable autologin first!'
             self.NalN = 'Please enable autologin first!'
             self.alogin = 'Autologin started!'
+            # Rebuild Database
             self.rdata = 'Removed database file!'
             self.adata = 'Rebuilded database!'
+            # All
+            self.errorInfo = 'Error Info:'
+            self.ploginT = 'Please login first!'
+            self.cerror = 'Command error.'
+            self.notc = ' is not a command.'
+            # Create
+            self.createH = '''You can use these command:
+repo <RepoName>    Create GitHub Repository'''
+            # Repo
+            self.crepoE = 'Could\'t create repository.'
+            self.crepoS = 'The repository was created successfully!'
+            # Git Mode
+            self.gmodeY = 'Git mode is enable now!'
+            self.gmodeN = 'Git mode is disable now!'
+            self.NgmodeY = 'Please disable git mode now!'
+            self.NgmodeN = 'Please enable git mode now!'
