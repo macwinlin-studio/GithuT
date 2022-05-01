@@ -1,13 +1,15 @@
 # coding=utf-8
 import sqlite3
 from github import Github as github_Github
-from os.path import realpath,dirname
+from os.path import realpath as os_path_realpath
+from os.path import dirname as os_path_dirname
 from sys import path as sys_path
 from webbrowser import open_new as web_open
 from requests import get as requests_get
 from os import remove as os_remove
-sys_path.append(dirname(realpath(__file__)))
+sys_path.append(os_path_dirname(os_path_realpath(__file__)))
 from language_core import languageC,cdatabase
+from backup_core import Backup, Import
 # project: GitHub Tools Core
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
@@ -167,31 +169,29 @@ def config(data):
             print(language.cerror)
         cur.close()
         con.close()
-    # Git Mode
-    elif data[0:3] == 'git':
-        cache = get(4,data)
+    # Devlop Mode
+    elif data[0:7] == 'devlop':
+        cache = get(8,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
         cur = con.cursor()
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
                 if basic[3] == 0:
-                    cur.execute("UPDATE data SET gmode=1 WHERE id=1")
+                    cur.execute("UPDATE data SET developM=1 WHERE id=1")
                     con.commit()
                     basic[3] = 1
-                    print(language.gmodeY)
+                    print(language.dmY)
                 else:
-                    print(language.NgmodeY)
+                    print(language.NdmY)
             else:
                 if basic[3] == 1:
-                    cur.execute("UPDATE data SET gmode=0 WHERE id=1")
+                    cur.execute("UPDATE data SET developM=0 WHERE id=1")
                     con.commit()
                     basic[3] = 0
-                    print(language.gmodeN)
+                    print(language.dmN)
                 else:
-                    print(language.NgmodeN)
-        else:
-            print(language.cerror)
+                    print(language.NdmN)
         cur.close()
         con.close()
     # Command Error
@@ -280,8 +280,30 @@ def crepo(data):
             print(language.crepoS)
     else:
         print(language.ploginT)
-# 
-
+    if basic[3] == 1:
+        drepo()
+# Delete Repository
+def drepo(data):
+    try:
+        repo = user.get_repo(data)
+        repo.delete()
+    except Exception as e:
+        print(language.drepoE)
+        print(language.errorInfo + str(e))
+    else:
+        print(language.drepoS)
+# Create Token
+def ctoken(data):
+    pass
+# Backup
+def backupF():
+    backup = Backup()
+    backup.save()
+# Import Backup File
+def importF():
+    cache = Import()
+    if cache.isBackup == 0:
+        cache.replace()
 # Run Command
 def run(data):
     if data == 'help':
@@ -315,6 +337,10 @@ def run(data):
                 crepo(get(12,data))
         else:
             print("'{}'".format(data) + language.notc)
+    elif data == 'backup':
+        backupF()
+    elif data == 'import':
+        importF()
     else:
         print("'{}'".format(data) + language.notc)
 if basic[2] == 1:
