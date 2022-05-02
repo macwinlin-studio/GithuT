@@ -1,5 +1,4 @@
 # coding=utf-8
-from re import S
 import sqlite3
 from json import dumps,loads
 from datetime import date as time_date
@@ -25,7 +24,6 @@ from language_core import BackupLanguage
 
 # Load Language
 language = BackupLanguage()
-language.reload()
 # Backup Database
 class Backup():
     def __init__(self):
@@ -34,12 +32,13 @@ class Backup():
         cur = con.cursor()
         cur.execute("select * from data")
         cache = cur.fetchone()
-        cache2 = {'ver':1.0,'data':[cache[1],cache[2],cache[3],cache[4]]}
+        cache2 = {'ver':1.0,'data':[cache[1],cache[2],cache[3],cache[4],cache[5]]}
         # JSON
         self.backup = dumps(cache2)
         date = time_date.today()
         self.name = 'backup-' + str(date.year) + '-' + str(date.month) + '-' + str(date.day) + '-' + str(randint(100000,1000000))
     def save(self):
+        language.reload()
         if not exists('BackupCache'):
             # Cache Directory
             mkdir('BackupCache')
@@ -132,8 +131,9 @@ class Backup():
             # Resave
             self.save()
 # Import Backup File To Database
-class Import(object):
+class Import():
     def __init__(self):
+        language.reload()
         # Backup File Path
         self.path = input(language.path)
         # Open Backup File
@@ -226,7 +226,7 @@ class Import(object):
                 # Import to database
                 if ver == 1.0:
                     print(language.ver)
-                    if len(data) == 4:
+                    if len(data) == 5:
                         con = sqlite3.connect('.mwl-githut-data.db')
                         cur = con.cursor()
                         try:

@@ -117,6 +117,8 @@ repo <RepoName>    创建GitHub仓库'''
             self.dmN = '开发模式已禁用！'
             self.NdmY = '请先禁用开发模式！'
             self.NdmN = '请先启用开发模式！'
+            self.deleteH = '''您可以使用以下命令：
+repo <RepoName>    删除GitHub仓库'''
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
@@ -188,13 +190,17 @@ repo <RepoName>    Create GitHub Repository'''
             # =Repo
             self.crepoE = 'Could\'t create repository.'
             self.crepoS = 'The repository was created successfully!'
-            self.drepoE = 'Could\'t delete repository.'
-            self.drepoS = 'The repository was deleted successfully!'
             # Devlop Mode
             self.dmY = 'Devlop mode is enable now!'
             self.dmN = 'Devlop mode is disable now!'
             self.NdmY = 'Please disable devlop mode first!'
             self.NdmN = 'Please enable devlop mode first!'
+            # Delete
+            self.deleteH = '''You can use these command:
+repo <RepoName>    Delete GitHub Repository'''
+            # =Repo
+            self.drepoE = 'Could\'t delete repository.'
+            self.drepoS = 'The repository was deleted successfully!'
 class BackupLanguage():
     def __init__(self):
         self.lList = ['zh-cn','en-us']

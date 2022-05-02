@@ -9,7 +9,7 @@ from requests import get as requests_get
 from os import remove as os_remove
 sys_path.append(os_path_dirname(os_path_realpath(__file__)))
 from language_core import languageC,cdatabase
-from backup_core import Backup, Import
+from backup_core import Backup,Import
 # project: GitHub Tools Core
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
@@ -30,7 +30,7 @@ def loadB():
     cur = con.cursor()
     cur.execute('select * from data')
     cache = cur.fetchone()
-    basic = [cache[2],cache[3],cache[4],cache[5]]
+    basic = [cache[2],cache[3],cache[4],cache[5],[0,0]]
     cur.close()
     con.close()
 loadB()
@@ -170,15 +170,15 @@ def config(data):
         cur.close()
         con.close()
     # Devlop Mode
-    elif data[0:7] == 'devlop':
-        cache = get(8,data)
+    elif data[0:6] == 'devlop':
+        cache = get(7,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
         cur = con.cursor()
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
                 if basic[3] == 0:
-                    cur.execute("UPDATE data SET developM=1 WHERE id=1")
+                    cur.execute("UPDATE data SET devlopM=1 WHERE id=1")
                     con.commit()
                     basic[3] = 1
                     print(language.dmY)
@@ -186,7 +186,7 @@ def config(data):
                     print(language.NdmY)
             else:
                 if basic[3] == 1:
-                    cur.execute("UPDATE data SET developM=0 WHERE id=1")
+                    cur.execute("UPDATE data SET devlopM=0 WHERE id=1")
                     con.commit()
                     basic[3] = 0
                     print(language.dmN)
@@ -196,6 +196,7 @@ def config(data):
         con.close()
     # Command Error
     else:
+        print(data)
         print(language.cerror)
 # Set Account Type
 def account(data):
@@ -284,14 +285,17 @@ def crepo(data):
         drepo()
 # Delete Repository
 def drepo(data):
-    try:
-        repo = user.get_repo(data)
-        repo.delete()
-    except Exception as e:
-        print(language.drepoE)
-        print(language.errorInfo + str(e))
+    if loginV == 1:
+        try:
+            repo = user.get_repo(data)
+            repo.delete()
+        except Exception as e:
+            print(language.drepoE)
+            print(language.errorInfo + str(e))
+        else:
+            print(language.drepoS)
     else:
-        print(language.drepoS)
+        print(language.ploginT)
 # Create Token
 def ctoken(data):
     pass
@@ -319,10 +323,11 @@ def run(data):
         else:
             githut(get(7,data))
     elif data[0:7] == 'account':
-        if data == 'account':
-            account('')
-        else:
-            account(get(8,data))
+        print('Deactivated command.')
+        #if data == 'account':
+            #account('')
+        #else:
+            #account(get(8,data))
     elif data == 'login':
         loginF()
     elif data == 'redata':
@@ -341,6 +346,16 @@ def run(data):
         backupF()
     elif data == 'import':
         importF()
+    elif data[0:6] == 'delete':
+        if data == 'delete':
+            print(language.deleteH)
+        elif data[7:11] == 'repo':
+            if get(7,data) == 'repo':
+                run('delete')
+            else:
+                drepo(get(12,data))
+        else:
+            print("'{}'".format(data) + language.notC)
     else:
         print("'{}'".format(data) + language.notc)
 if basic[2] == 1:
