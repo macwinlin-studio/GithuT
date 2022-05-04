@@ -77,7 +77,7 @@ Then the backup file is a compressed file(suffix is *.zip*)
 
 A backup file:
 
-backup-0000-0-00-000000_.backup_(original suffix is *.zip*)
+backup-0000-0-00-000000<i>.backup</i>(original suffix is *.zip*)
 
 |-backup-0000-0-00-000000.json
 
