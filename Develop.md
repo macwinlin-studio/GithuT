@@ -15,11 +15,11 @@
   </a>
 </div>
 
-If you try to devlop other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
+If you try to develop other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
 ## GitHub Tools GUI Application
 
-If you try to deploy GUI application,please use this project's core.But you can use other cores,too.
+If you try to develop GUI application,please use this project's core.But you can use other cores,too.
 
 And if you use our core,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
@@ -43,7 +43,7 @@ Then send new core to [us](mailto:githut@macwinlin.ml)!
 
 ### GitHub Tools Main Core
 
-Why modify main core?Because you want to deploy GUI application?OK!
+Why modify main core?Because you want to develop GUI application?OK!
 
 **But unofficial shell application's probability of joining official is small.**
 
