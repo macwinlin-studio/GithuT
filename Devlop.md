@@ -15,7 +15,7 @@
   </a>
 </div>
 
-If you try to other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
+If you try to devlop other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
 ## GitHub Tools GUI Application
 
@@ -75,7 +75,7 @@ Then the backup file is a compressed file(suffix is *.zip*)
 
 A backup file:
 
-backup-0000-0-00-000000*.backup*(original suffix is *.zip*)
+backup-0000-0-00-000000<i>.backup</i>(original suffix is *.zip*)
 
 |-backup-0000-0-00-000000.json
 
