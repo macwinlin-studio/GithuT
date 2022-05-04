@@ -15,7 +15,7 @@
   </a>
 </div>
 
-Full Name:Github Tools.Latest Version:LTS 1.0.0
+Full Name:Github Tools.Latest Version:Alpha 0.1
 
 You can download source code to use this project.
 
