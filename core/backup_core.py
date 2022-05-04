@@ -3,7 +3,7 @@ import sqlite3
 from json import dumps,loads
 from datetime import date as time_date
 from random import randint
-from os.path import realpath,dirname,exists,isfile
+from os.path import realpath,dirname,exists,isfile,abspath
 from sys import path
 from os import remove,mkdir,rename
 from hashlib import sha256
@@ -75,10 +75,8 @@ class Backup():
             if 'Windows' in platform():
                 cache = self.name + '.backup'
                 if not exists(cache):
-                    copy(realpath(self.name + '.zip'),dirname(realpath(__file__)))
                     rename(self.name + '.zip',cache)
-                    remove('core\\' + self.name + '.zip')
-                    print(language.filename + realpath(cache))
+                    print(language.filename + abspath(cache))
                     rmtree('BackupCache')
                 else:
                     tml = input(language.replace)
@@ -88,10 +86,8 @@ class Backup():
                                 remove(cache)
                             else:
                                 rmtree(cache)
-                            copy(realpath(self.name + '.zip'),dirname(realpath(__file__)))
                             rename(self.name + '.zip',cache)
-                            remove('core/' + self.name + '.zip')
-                            print(language.filename + realpath(cache))
+                            print(language.filename + abspath(cache))
                             rmtree('BackupCache')
                         else:
                             print(language.backupC)
@@ -101,10 +97,8 @@ class Backup():
                 # Other Platform
                 cache = self.name + '.backup'
                 if not exists(cache):
-                    copy(realpath(self.name + '.zip'),dirname(realpath(__file__)))
                     rename(self.name + '.zip',cache)
-                    remove('core/' + self.name + '.zip')
-                    print(language.filename + realpath(cache))
+                    print(language.filename + abspath(cache))
                     rmtree('BackupCache')
                 else:
                     tml = input(language.replace)
@@ -114,10 +108,8 @@ class Backup():
                                 remove(cache)
                             else:
                                 rmtree(cache)
-                            copy(realpath(self.name + '.zip'),dirname(realpath(__file__)))
                             rename(self.name + '.zip',cache)
-                            remove('core/' + self.name + '.zip')
-                            print(language.filename + realpath(cache))
+                            print(language.filename + abspath(cache))
                             rmtree('BackupCache')
                         else:
                             print(language.backupC)
