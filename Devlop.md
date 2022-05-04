@@ -15,7 +15,7 @@
   </a>
 </div>
 
-If you try to other devlop version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
+If you try to devlop other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
 ## Version
 
