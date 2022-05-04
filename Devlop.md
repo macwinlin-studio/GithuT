@@ -15,9 +15,11 @@
   </a>
 </div>
 
-If you try to other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
+If you try to other devlop version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
-## GitHub Tools GUI Application
+## Version
+
+### GitHub Tools GUI Application
 
 If you try to deploy GUI application,please use this project's core.But you can use other cores,too.
 
@@ -75,7 +77,7 @@ Then the backup file is a compressed file(suffix is *.zip*)
 
 A backup file:
 
-backup-0000-0-00-000000*.backup*(original suffix is *.zip*)
+backup-0000-0-00-000000_.backup_(original suffix is *.zip*)
 
 |-backup-0000-0-00-000000.json
 
@@ -88,7 +90,7 @@ Make these two files.
 *backup-0000-0-00-000000.json*'s text is:
 
 ```json
-{"ver": 1.0, "data": ["zh-cn", 0, '123456', 0, 0]}
+{"ver": 1.0, "data": ["zh-cn", 0, "123456", 0, 0]}
 ```
 
 And *backup-0000-0-00-000000.sha256*'s text is:
