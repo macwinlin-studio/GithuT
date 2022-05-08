@@ -4,6 +4,12 @@
   
   English | [简体中文](https://github.com/macwinlin-studio/GithuT/blob/1.0.0/README-zh.md)
   
+  <a href="https://github.com/macwinlin-studio/GithuT/releases">
+    <img src="https://img.shields.io/github/last-commit/macwinlin-studio/GithuT/a0.2" alt="">
+  </a>
+  <a href="https://github.com/macwinlin-studio/GithuT/releases">
+    <img src="https://img.shields.io/github/downloads/macwinlin-studio/GithuT/total" alt="">
+  </a>
   <a href="https://github.com/macwinlin-studio/GithuT/blob/1.0.0/LICENSE">
     <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="">
   </a>
