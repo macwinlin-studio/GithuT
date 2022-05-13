@@ -18,7 +18,7 @@ from backup_core import Backup,Import
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
-# Make unofficial GUI client please contact mwl@macwinlin.ml.
+# Make unofficial GUI client please contact githut@macwinlin.ml.
 
 # Code
 
