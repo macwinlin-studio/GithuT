@@ -33,7 +33,7 @@
 
 ## 使用
 
-使用请去[测试存储库](https://github.com/xtest2021/githut-test-repo/README.md#usage)
+使用请去[测试存储库](https://github.com/xtest2021/githut-test-repo/blob/main/README.md#usage)
 
 ## 维护
 
