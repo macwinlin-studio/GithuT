@@ -2,7 +2,7 @@
   <img src="https://s1.imagehub.cc/images/2022/04/09/favicon.png" width="100px" height="100px">
   <h1 align="center">GitHub Tools</h1>
   
-  English | [简体中文](https://github.com/macwinlin-studio/GithuT/blob/1.0.0/README-zh.md)
+  English | [简体中文](https://github.com/macwinlin-studio/GithuT/blob/a0.2/README-zh.md)
   
   <a href="https://github.com/macwinlin-studio/GithuT/releases">
     <img src="https://img.shields.io/github/last-commit/macwinlin-studio/GithuT/a0.2" alt="">
