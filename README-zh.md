@@ -2,10 +2,10 @@
   <img src="https://s1.imagehub.cc/images/2022/04/09/favicon.png" width="100px" height="100px">
   <h1 align="center">GitHub Tools</h1>
   
-  [English](https://github.com/macwinlin-studio/GithuT/README.md) | 简体中文
+  [English](https://github.com/macwinlin-studio/GithuT/blob/a0.2/README.md) | 简体中文
   
   <a href="https://github.com/macwinlin-studio/GithuT/releases">
-    <img src="https://img.shields.io/github/last-commit/macwinlin-studio/GithuT/a0.1" alt="">
+    <img src="https://img.shields.io/github/last-commit/macwinlin-studio/GithuT/a0.2" alt="">
   </a>
   <a href="https://github.com/macwinlin-studio/GithuT/releases">
     <img src="https://img.shields.io/github/downloads/macwinlin-studio/GithuT/total" alt="">
