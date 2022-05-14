@@ -80,7 +80,7 @@ def githut(data):
         print(language.aboutAMTverN)
         print(language.aboutAMTblog)
     elif data in ['-po','--program-open']:
-        web_open('https://github.com/macwinlin-studio/GithuT/tree/1.0.0')
+        web_open('https://github.com/macwinlin-studio/GithuT/tree/a0.1')
     elif data in ['-ao','--author-open']:
         web_open('https://blog.macwinlin.ml')
     elif data in ['-l','--license']:
