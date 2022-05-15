@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,devlopM INTEGER NOT NULL DEFAULT 0)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2',update INTEGER NOT NULL DEFAULT 1)")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2',1)")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -157,7 +157,7 @@ import    Import Backup'''
 language <language>               Change GithuT Language
 token <github-token>              Change GitHub Token
 autologin [-y/--yes | -n/--no]    Enable/Disable Autologin
-devlop [-y/--yes | -n/--no]       Enable/Disable Devlop Mode'''
+develop [-y/--yes | -n/--no]       Enable/Disable Devlop Mode'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
             self.accountH = '''You can use these command:
 -u | --user           Set The Account Type To Individual
@@ -257,3 +257,13 @@ class BackupLanguage():
             self.importS = '√  Imported backup file to database.'
             self.importE = '×  Could\'t import backup file to database.'
             self.lenE = '×  Backup file data number is big/small.'
+class UpdateLanguage():
+    def __init__(self):
+        self.lList = ['zh-cn','en-us']
+    def reload(self):
+        if readLanguage() == 'zh-cn':
+            self.haveNew = '有新版本，是否安装？(y/n)'
+            self.downloadE = '无法获取更新。'
+        else:
+            self.haveNew = 'Have new version,is it install?(y/n)'
+            self.downloadE = 'Could\'t get update.'
