@@ -54,14 +54,14 @@ class languageC():
     def reload(self):
         if readLanguage() == 'zh-cn':
             self.aboutPMT = '关于程序'
-            self.aboutPMTgtv = '版本:LTS(长期支持)1.0'
+            self.aboutPMTgtv = '版本:alpha 0.1'
             self.aboutPMTpgv = 'PyGithub版本:1.55'
             self.aboutPMTpyv = '上次测试Python版本:3.9.1'
             self.aboutPMTgithub = '打开GitHub仓库,请使用githut -po'
             self.aboutAMT = '关于作者'
             self.aboutAMTauthor = '作者:MacWinLin工作室'
             self.aboutAMTmainD = '主开发者:Xinxin2021'
-            self.aboutAMTverN = '版本更新时间:2022年3月26日'
+            self.aboutAMTverN = '版本更新时间:2022年5月21日'
             self.aboutAMTblog = '打开MWL工作室博客,请使用githut -ao'
             self.githutH = '''您可以使用这些命令：
 -a | --author    关于作者
@@ -122,7 +122,7 @@ repo <RepoName>    删除GitHub仓库'''
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
-            self.aboutPMTgtv = 'Version:LTS(Long Term Support) 1.0'
+            self.aboutPMTgtv = 'Version:alpha 0.1'
             self.aboutPMTpgv = 'PyGithub Version:1.55'
             self.aboutPMTpyv = 'Last Test Python Version:3.9.1'
             self.aboutPMTgithub = 'Open GitHub Repository,Please Use githut -po'
@@ -130,7 +130,7 @@ repo <RepoName>    删除GitHub仓库'''
             self.aboutAMT = 'About Author'
             self.aboutAMTauthor = 'Author:MacWinLin Studio'
             self.aboutAMTmainD = 'Main Developer:Xinxin2021'
-            self.aboutAMTverN = 'Version Updated Time:March 26, 2022'
+            self.aboutAMTverN = 'Version Updated Time:May 21, 2022'
             self.aboutAMTblog = 'Open MWL Studio\'s Blog,Please Use githut -am'
             # Githut Helper Text
             self.githutH = '''You can use these command:
