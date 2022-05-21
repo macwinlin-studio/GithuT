@@ -18,6 +18,7 @@ O     |     |          ||           | |           O
 O     |      =        =  =         =  |           O
 L     |       --------    ---------   =---------  L
  MacWinLin MacWinLin MacWinLin MacWinLin MacWinLin ''')
+from re import L
 from core.language_core import UpdateLanguage,cdatabase,rdatabase
 from core.githut_core import run
 from requests import get
@@ -49,8 +50,7 @@ class Update():
             self.latestVersion = cache['latest']
             self.latestVersionLink = cache['link']
             self.updateFile = cache['files']
-            self.database = cache['database']
-            return [self.latestVersion,self.latestVersionLink,self.updateFile,self.database]
+            return [self.latestVersion,self.latestVersionLink,self.updateFile]
 class logClass:
     def __init__():
         logging.basicConfig(level=logging.DEBUG,filemode='a+',filename='githut-log.log',format="%(asctime)s - %(name)s - %(levelname)-9s - %(filename)-8s : %(lineno)s line - %(message)s",datefmt="%Y-%m-%d %H:%M:%S")
@@ -88,9 +88,9 @@ def haveField(cur,field):
 # Update
 def updateFunction():
     log.info('Finding latest version')
-    if len(update.latest(self=update)) == 4:
-        latest = update.latest(self=update)
-        if ver != latest:
+    latest = update.latest(self=update)
+    if len(latest) == 3:
+        if ver != latest[0]:
             tml = input(language.haveNew)
             if tml in ['y','Y','n','N']:
                 if tml in ['y','Y']:
@@ -98,12 +98,14 @@ def updateFunction():
                     backupDatabaseId = rdatabase()
                     for i in range(len(latest[2])):
                         try:
+                            print('Geting {} file'.format(latest[2][i]))
                             cache = get(latest[1] + latest[2][i]).text
                         except Exception as e:
                             print(language.downloadE)
                             log.error('Could\'t get update')
                             log.exception(e)
                         else:
+                            print('Got {} file'.format(latest[2][i]))
                             fileCache.append(cache)
                     rename('core','core-backup')
                     log.info('Renamed original core dir to backup core dir')
@@ -126,7 +128,6 @@ def updateFunction():
                     log.info('Wrote file okay')
                     rmtree('core-backup')
                     log.info('Deleted backup dir')
-                    database = cache[3]
                     con = sqlite3.connect('.mwl-githut-data.db')
                     cur = con.cursor()
                     cur.execute('select * from data')
@@ -143,8 +144,6 @@ def updateFunction():
                             cache = 'UPDATE data SET {}={} WHERE id=1'.format(backupDatabaseId[i],backupDatabaseText[i])
                             cur.execute(cache)
                             con.commit()
-                    cur.execute('UPDATE data SET version=? WHERE id=1',latest[0])
-                    con.commit()
                     cur.close()
                     con.close()
                     log.info('Updated to {}'.format(latest[0]))
