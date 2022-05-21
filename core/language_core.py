@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2',update INTEGER NOT NULL DEFAULT 1)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2',1)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w21a',updateT INTEGER NOT NULL DEFAULT 1)")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w21a',1)")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -40,6 +40,9 @@ def cdatabase():
     con.close()
     if 'Windows' in platform():
         os_popen('attrib +H .mwl-githut-data.db')
+# Define Read Database
+def rdatabase():
+    return ['id','language','htoken','token','alogin','developM','version','update']
 # Create Database
 if not os_path_isfile('.mwl-githut-data.db'):
     if os_path_isdir('.mwl-githut-data.db'):

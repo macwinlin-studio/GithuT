@@ -34,7 +34,7 @@ def loadB():
     global basic
     global ver
     con = sqlite3.connect('.mwl-githut-data.db')
-    log.info('Connect to database')
+    log.info('Connected to database')
     cur = con.cursor()
     cur.execute('select * from data')
     cache = cur.fetchone()
@@ -127,7 +127,7 @@ def config(data):
         cache = get(6,data)
         cache2 = par(cache)
         con = sqlite3.connect('.mwl-githut-data.db')
-        log.info('Connect to database')
+        log.info('Connected to database')
         cur = con.cursor()
         cur.execute("select * from data")
         cache3 = cur.fetchone()
@@ -160,7 +160,7 @@ def config(data):
     elif data[0:8] == 'language':
         cache = get(9,data)
         con = sqlite3.connect('.mwl-githut-data.db')
-        log.info('Connect to database')
+        log.info('Connected to database')
         cur = con.cursor()
         # Search Language List
         if cache in language.lList:
@@ -179,7 +179,7 @@ def config(data):
         cache = get(10,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
-        log.info('Connect to database')
+        log.info('Connected to database')
         cur = con.cursor()
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
@@ -209,7 +209,7 @@ def config(data):
         cache = get(7,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
-        log.info('Connect to database')
+        log.info('Connected to database')
         cur = con.cursor()
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
