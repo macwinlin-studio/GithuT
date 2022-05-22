@@ -3,7 +3,7 @@
 # file: shell.py
 # author: MacWinLin Studio CGK Team
 # email: mwl@macwinlin.ml
-# version: LTS(Long Term Support) 1.0
+# version: LTS(Long Term Support) 2.0
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # Make unofficial GUI client please view core file.
