@@ -132,7 +132,7 @@ def updateFunction():
                     cur = con.cursor()
                     cur.execute('select * from data')
                     cache = cur.fetchone()
-                    backupDatabaseText = ['1',list(cache[1:-1]),cache[-1]]
+                    backupDatabaseText = ['1',*list(cache[1:])]
                     cur.close()
                     con.close()
                     remove('.mwl-githut-data.db')

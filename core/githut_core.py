@@ -72,7 +72,7 @@ def par(data2):
     return turn
 # Get Start To -1's Text
 def get(start,text):
-    return(text[start:-1] + text[-1])
+    return text[start:]
 # About
 def githut(data):
     if data == '':
@@ -132,19 +132,25 @@ def config(data):
         cur.execute("select * from data")
         cache3 = cur.fetchone()
         if cache2[0] == 'add':
-            if cache3[2] == 0:
-                cur.execute("UPDATE data SET token=? WHERE id=?",(cache2[1],1))
-                cur.execute("UPDATE data SET htoken=1 WHERE id=1")
-                con.commit()
-                basic[0] = 1
-                basic[1] = cache2[1]
-                log.info('Add token')
+            if data.strip() != 'token add':
+                log.info('Have token data')
+                if cache3[2] == 0:
+                    cur.execute("UPDATE data SET token=? WHERE id=?",(cache2[1],1))
+                    cur.execute("UPDATE data SET htoken=1 WHERE id=1")
+                    con.commit()
+                    basic[0] = 1
+                    basic[1] = cache2[1]
+                    log.info('Add token')
+                else:
+                    print(language.hToken)
+                    log.warning('Have a token')
             else:
-                print(language.hToken)
-                log.warning('Have a token')
+                log.warning('Not have token data')
+                print('Please enter token')
         elif cache2[0] == 'remove':
             if cache3[2] == 1:
                 cur.execute("UPDATE data SET htoken=0 WHERE id=1")
+                cur.execute("UPDATE data SET token='123456' WHERE id=1")
                 con.commit()
                 basic[0] = 0
                 log.info('Remove token')
@@ -158,22 +164,23 @@ def config(data):
         log.info('Database closed')
     # Config Language
     elif data[0:8] == 'language':
-        cache = get(9,data)
-        con = sqlite3.connect('.mwl-githut-data.db')
-        log.info('Connected to database')
-        cur = con.cursor()
-        # Search Language List
-        if cache in language.lList:
-            cur.execute("UPDATE data SET language='" + cache + "' WHERE id=1")
-            con.commit()
-            log.info()
-        else:
-            print(language.cerror)
-            log.warning('Could\'t change language')
-        language.reload()
-        cur.close()
-        con.close()
-        log.info('Database closed')
+        if data.strip() != 'language':
+            cache = get(9,data)
+            con = sqlite3.connect('.mwl-githut-data.db')
+            log.info('Connected to database')
+            cur = con.cursor()
+            # Search Language List
+            if cache in language.lList:
+                cur.execute("UPDATE data SET language='" + cache + "' WHERE id=1")
+                con.commit()
+                log.info()
+            else:
+                print(language.cerror)
+                log.warning('Could\'t change language')
+            language.reload()
+            cur.close()
+            con.close()
+            log.info('Database closed')
     # Config Autologin
     elif data[0:9] == 'autologin':
         cache = get(10,data)
@@ -429,6 +436,7 @@ def run(data):
     else:
         print("'{}'".format(data) + language.notc)
         log.warning('Command not found')
+# Autologin
 if basic[2] == 1:
     print(language.alogin)
     log.debug('Autologin start')

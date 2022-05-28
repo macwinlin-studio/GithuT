@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w21b',updateT INTEGER NOT NULL DEFAULT 1)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w21b',1)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w22a',updateT INTEGER NOT NULL DEFAULT 1)")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w22a',1)")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -86,7 +86,7 @@ import    导入备份'''
             self.nhToken = '请先添加Token。'
             self.configH = '''您可以使用这些命令：
 language <language>                   更改GithuT语言
-token <github-token>              更改GitHub Token
+token [add | remove] <github-token>              更改GitHub Token
 autologin [-y/--yes | -n/--no]    启用/禁用自动登录
 develop [-y/--yes | -n/--no]      启用/禁用开发模式'''
             self.licenseE = '无法加载协议，请确认您连接到网络。'
@@ -158,7 +158,7 @@ import    Import Backup'''
             self.nhToken = 'Please add the token first.'
             self.configH = '''You can use these command:
 language <language>               Change GithuT Language
-token <github-token>              Change GitHub Token
+token [add | remove] <github-token>              Change GitHub Token
 autologin [-y/--yes | -n/--no]    Enable/Disable Autologin
 develop [-y/--yes | -n/--no]       Enable/Disable Devlop Mode'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
