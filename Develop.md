@@ -59,11 +59,41 @@ You can add more function in your core.
 
 Maybe your application is good!Better than ours!
 
+#### Feedback
+
+##### Join Feedback Plan
+
+If you want to join feedback plan,join Dev channel,please send a email to [us](mailto:githut@macwinlin.ml),then your feedback username is your email.
+
+We will send a feedback account to you.
+
+Use GithuT(version>=22w22b) to login your account,then change your password.
+
+**_Don't send useless information,violator will block account_**
+
+##### Feedback server
+
+If you want to make other feedback server,please change source code.
+
+[How to make feedback server](https://githut.macwinlin.ml/feedback/)
+
+If you don't want to change source code,you can contact [us](mailto:githut@macwinlin.ml)
+
+And we will send a special feedback account to you.
+
+Please use this account to feedback to us.
+
+**_Remember,change your password!_**
+
+**_Don't send useless information,violator please block his/her account,otherwise we will violator your(s) organization account_**
+
 ### GitHub Tools Backup Core
 
 You can rewrite this core.
 
 But please use this mode to make backup file,then this file can use in our version,too!
+
+Demonstration of using backup core 1.0:
 
 #### Step 1:
 
