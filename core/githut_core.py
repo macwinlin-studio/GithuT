@@ -125,12 +125,13 @@ def githut(data):
         log.warning('Command not found')
 # Config Language And Token
 def config(data):
+    global clearTokenInfo
     if data == '':
         # Helper
         print(language.configH)
         log.info('Show config help')
     # Config 
-    elif data[0:5] == 'token':
+    elif data[:5] == 'token':
         cache = get(6,data)
         cache2 = par(cache)
         con = sqlite3.connect('.mwl-githut-data.db')
@@ -173,7 +174,7 @@ def config(data):
         con.close()
         log.info('Database closed')
     # Config Language
-    elif data[0:8] == 'language':
+    elif data[:8] == 'language':
         if data.strip() != 'language':
             cache = get(9,data)
             con = sqlite3.connect('.mwl-githut-data.db')
@@ -195,12 +196,13 @@ def config(data):
             print(language.cerror)
             log.warning('Command not found')
     # Config Autologin
-    elif data[0:9] == 'autologin':
+    elif data[:9] == 'autologin':
         cache = get(10,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
         log.info('Connected to database')
         cur = con.cursor()
+        print(cache)
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
                 if basic[2] == 0:
@@ -232,7 +234,7 @@ def config(data):
         con.close()
         log.info('Database closed')
     # Develop Mode
-    elif data[0:7] == 'develop':
+    elif data[:7] == 'develop':
         cache = get(7,data)
         # Connect Database
         con = sqlite3.connect('.mwl-githut-data.db')
@@ -268,7 +270,7 @@ def config(data):
         con.close()
         log.info('Database closed')
     # Auto clear token
-    elif data[0:3] == 'ct':
+    elif data[:2] == 'ct':
         # Connect database
         con = sqlite3.connect('.mwl-githut-data.db')
         log.info('Connected to database')
@@ -296,6 +298,39 @@ def config(data):
         else:
             print(language.cerror)
             log.warning('Command not found')
+    # Auto Check Update
+    elif data[:6] == 'update':
+        cache = get(7,data)
+        con = sqlite3.connect('.mwl-githut-data.db')
+        cur = con.cursor()
+        cur.execute('select * from data')
+        sql_cache = cur.fetchone()
+        sql_cache = sql_cache[7]
+        if cache in ['-y','--yes','-n','--no']:
+            if cache == '-y' or cache == '--yes':
+                if sql_cache == 0:
+                    cur.execute('UPDATE data SET updateT=1 WHERE id=1')
+                    con.commit()
+                    log.info('Change database:auto-check-update;ON')
+                    print(language.acuY)
+                else:
+                    print(language.NaucN)
+            else:
+                if sql_cache == 1:
+                    cur.execute('UPDATE data SET updateT=0 WHERE id=1')
+                    con.commit()
+                    log.info('Change database:auto-check-update;OFF')
+                    print(language.acuN)
+                else:
+                    print(language.NaucN)
+    elif data[:3] == 'UPS' and data.strip() != 'UPS':
+        cache = get(4,data)
+        con = sqlite3.connect('.mwl-githut-data.db')
+        cur = con.cursor()
+        cur.execute("UPDATE data SET ups='?' WHERE id=1".format(cache))
+        con.commit()
+        cur.close()
+        con.close()
     # Command Error
     else:
         print(language.cerror)
@@ -544,19 +579,19 @@ def run(data):
     if data == 'help':
         print(language.help)
         log.info('Showed Help')
-    elif data[0:6] == 'config':
+    elif data[:6] == 'config':
         if data == 'config':
             config('')
         else:
             config(get(7,data))
         log.info('Used config function')
-    elif data[0:6] == 'githut':
+    elif data[:6] == 'githut':
         if data == 'githut':
             githut('')
         else:
             githut(get(7,data))
         log.info('Used about function')
-    elif data[0:7] == 'account':
+    elif data[:7] == 'account':
         print('Deactivated command.')
         #if data == 'account':
             #account('')
@@ -569,7 +604,7 @@ def run(data):
     elif data == 'redata':
         redata()
         log.info('Used rebuild function')
-    elif data[0:6] == 'create':
+    elif data[:6] == 'create':
         if data == 'create':
             print(language.createH)
             log.info('Show create help')
@@ -591,7 +626,7 @@ def run(data):
     elif data == 'feedback':
         feedback()
         log.info('Used feedback function')
-    elif data[0:6] == 'delete':
+    elif data[:6] == 'delete':
         if data == 'delete':
             print(language.deleteH)
             log.info('Show delete help')
