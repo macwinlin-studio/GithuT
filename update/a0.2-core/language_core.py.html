@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w22a',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w22a',1,0,'123456','https://githut.macwinlin.ml/feedback.json',0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w23a',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update')")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w23a',1,0,'123456','https://githut.macwinlin.ml/feedback.json',0,'https://githut.macwinlin.ml/update')")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -92,7 +92,9 @@ token [add | remove] <github-token>   更改GitHub Token
 autologin [-y/--yes | -n/--no]        启用/禁用自动登录
 develop [-y/--yes | -n/--no]          启用/禁用开发模式
 feedback <link>                       更改反馈服务器链接
-ct [-y/--yes | -n/--no]               退出前清除Token'''
+ct [-y/--yes | -n/--no]               退出前清除Token
+update [-y/--yes | -n/--no]           启用/禁用自动检查更新
+UPS <link>                            更改更新服务器链接'''
             self.licenseE = '无法加载协议，请确认您连接到网络。'
             self.accountH = '''您可以使用这些命令：
 -u | --user         设置账号类型为个人
@@ -146,6 +148,10 @@ repo <RepoName>    删除GitHub仓库'''
             self.ctN = '清除Token已禁用！'
             self.NctY = '请先禁用清除Token！'
             self.NctN = '请先启用清除Token！'
+            self.acuY = '自动检查更新已启用！'
+            self.acuN = '自动检查更新已禁用！'
+            self.NacuY = '请先禁用自动检查更新！'
+            self.NacuN = '请先启用自动检查更新！'
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
@@ -188,7 +194,10 @@ token [add | remove] <github-token>   Change GitHub Token
 autologin [-y/--yes | -n/--no]        Enable/Disable Autologin
 develop [-y/--yes | -n/--no]          Enable/Disable Develop Mode
 feedback <link>                       Change Feedback Server Link
-ct [-y/--yes | -n/--no]               Clear Token In Exit Program'''
+ct [-y/--yes | -n/--no]               Clear Token In Exit Program
+update [-y/--yes | -n/--no]           Enable/Disable Auto Check Update
+UPS <link>                            Change Update Server
+debug [-y/--yes | -n/--no]            Enable/Disable Debug Mode'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
             self.accountH = '''You can use these command:
 -u | --user           Set The Account Type To Individual
@@ -254,6 +263,16 @@ repo <RepoName>    Delete GitHub Repository'''
             self.ctN = 'Clear token is disable now!'
             self.NctY = 'Please disable clear token first!'
             self.NctN = 'Please enable clear token first!'
+            # Auto Check Update
+            self.acuY = 'Auto check update is enable now!'
+            self.acuN = 'Auto check update is disable now!'
+            self.NacuY = 'Please disable auto check update first!'
+            self.NacuN = 'Please enable auto check update first!'
+            # Debug Mode
+            self.debugY = 'Debug mode is enable now!'
+            self.debugN = 'Debug mode is disable now!'
+            self.NdebugY = 'Please disable debug mode first!'
+            self.NdebugN = 'Please enable debug mode first!'
 class BackupLanguage():
     def __init__(self):
         self.lList = ['zh-cn','en-us']
