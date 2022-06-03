@@ -19,7 +19,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0
+# version: a0.2-22w23c
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -45,12 +45,16 @@ def loadB():
     cur.execute('select * from data')
     cache = cur.fetchone()
     ver = cache[6]
-    basic = [cache[2],cache[3],cache[4],cache[5]]
+    basic = [cache[2],cache[3],cache[4],cache[5],cache[12]]
     clearTokenInfo = cache[11]
     cur.close()
     con.close()
     log.info('Database closed')
 loadB()
+if basic[4] == 0:
+    log.basic(0)
+else:
+    log.basic(1)
 log.info('Version:' + ver)
 log.info('Load basic information')
 # Record Login State
@@ -202,7 +206,6 @@ def config(data):
         con = sqlite3.connect('.mwl-githut-data.db')
         log.info('Connected to database')
         cur = con.cursor()
-        print(cache)
         if cache in ['-y','--yes','-n','--no']:
             if cache == '-y' or cache == '--yes':
                 if basic[2] == 0:
@@ -284,8 +287,10 @@ def config(data):
                     log.info('Change database:clear token;ON')
                     clearTokenInfo = 1
                     print(language.ctY)
+                    log.info('Enable auto clear token now')
                 else:
                     print(language.NctY)
+                    log.warning('Canceled change auto clear token enable state')
             else:
                 if clearTokenInfo == 1:
                     cur.execute("UPDATE data SET clearToken=0 WHERE id=1")
@@ -293,8 +298,10 @@ def config(data):
                     log.info('Change database:cleartoken;OFF')
                     clearTokenInfo = 0
                     print(language.ctN)
+                    log.info('Disable auto clear token now')
                 else:
                     print(language.NctN)
+                    log.warning('Canceled change auto clear token enable state')
         else:
             print(language.cerror)
             log.warning('Command not found')
@@ -313,16 +320,21 @@ def config(data):
                     con.commit()
                     log.info('Change database:auto-check-update;ON')
                     print(language.acuY)
+                    log.info('Enable auto check update now')
                 else:
-                    print(language.NaucN)
+                    print(language.NacuN)
+                    log.warning('Canceled change auto check update enable state')
             else:
                 if sql_cache == 1:
                     cur.execute('UPDATE data SET updateT=0 WHERE id=1')
                     con.commit()
                     log.info('Change database:auto-check-update;OFF')
                     print(language.acuN)
+                    log.info('Disable auto check update now')
                 else:
-                    print(language.NaucN)
+                    print(language.NacuN)
+                    log.warning('Canceled change auto check update enable state')
+    # Update Server
     elif data[:3] == 'UPS' and data.strip() != 'UPS':
         cache = get(4,data)
         con = sqlite3.connect('.mwl-githut-data.db')
@@ -331,6 +343,30 @@ def config(data):
         con.commit()
         cur.close()
         con.close()
+    # Debug Mode
+    elif data[:5] == 'debug':
+        cache = get(6,data)
+        con = sqlite3.connect('.mwl-githut-data.db')
+        cur = con.cursor()
+        if cache in ['-y','--yes','-n','--no']:
+            if cache == '-y' or cache == '--yes':
+                if basic[4] == 0:
+                    cur.execute("UPDATE data SET debug=1 WHERE id=1")
+                    con.commit()
+                    log.info('Change database:debug-mode;ON')
+                    print(language.debugY)
+                    log.info('Enable debug mode now')
+                else:
+                    log.warning('Canceled change debug mode enable state')
+            else:
+                if basic[4] == 1:
+                    cur.execute("UPDATE data SET debug=0 WHERE id=1")
+                    con.commit()
+                    log.info('Change database:debug-mode;OFF')
+                    print(language.debugN)
+                    log.info('Disable debug mode now')
+                else:
+                    log.warning('Canceled change debug mode enable state')
     # Command Error
     else:
         print(language.cerror)

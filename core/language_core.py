@@ -196,7 +196,8 @@ develop [-y/--yes | -n/--no]          Enable/Disable Develop Mode
 feedback <link>                       Change Feedback Server Link
 ct [-y/--yes | -n/--no]               Clear Token In Exit Program
 update [-y/--yes | -n/--no]           Enable/Disable Auto Check Update
-UPS <link>                            Change Update Server'''
+UPS <link>                            Change Update Server
+debug [-y/--yes | -n/--no]            Enable/Disable Debug Mode'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
             self.accountH = '''You can use these command:
 -u | --user           Set The Account Type To Individual
@@ -267,6 +268,11 @@ repo <RepoName>    Delete GitHub Repository'''
             self.acuN = 'Auto check update is disable now!'
             self.NacuY = 'Please disable auto check update first!'
             self.NacuN = 'Please enable auto check update first!'
+            # Debug Mode
+            self.debugY = 'Debug mode is enable now!'
+            self.debugN = 'Debug mode is disable now!'
+            self.NdebugY = 'Please disable debug mode first!'
+            self.NdebugN = 'Please enable debug mode first!'
 class BackupLanguage():
     def __init__(self):
         self.lList = ['zh-cn','en-us']
