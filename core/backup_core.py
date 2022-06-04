@@ -17,7 +17,7 @@ import log_core as log
 # file: backup_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0.2
+# version: 22w23d
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -34,7 +34,7 @@ class Backup():
         cur = con.cursor()
         cur.execute("select * from data")
         cache = cur.fetchone()
-        cache2 = {'ver':1.2,'data':[*cache[1:6],'a0.2-22w23c',cache[7:]]}
+        cache2 = {'ver':1.2,'data':[*cache[1:6],'a0.2-22w23d',cache[7:]]}
         # JSON
         self.backup = dumps(cache2)
         date = time_date.today()
@@ -269,7 +269,7 @@ class Import():
                         cur = con.cursor()
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23c',{},{},'{}','{}',{})".format(*data)
+                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23d',{},{},'{}','{}',{})".format(*data)
                             cur.execute(cache)
                             con.commit()
                         except Exception as e:
@@ -294,7 +294,7 @@ class Import():
                     if len(data) == 7:
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23c',{},{},'{}','{}')".format(*data,cache[8:])
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23d',{},{},'{}','{}')".format(*data,cache[8:])
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:
@@ -320,7 +320,7 @@ class Import():
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
                             cache = ''
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23c',{})".format(*data,cache[7:])
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w23d',{})".format(*data,cache[7:])
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:

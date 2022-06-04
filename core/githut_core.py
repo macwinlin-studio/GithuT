@@ -1,5 +1,6 @@
 # coding=utf-8
-import sqlite3,atexit
+import sqlite3
+from atexit import register
 from ipaddress import ip_address as ipv
 from platform import platform
 from github import Github as github_Github
@@ -19,7 +20,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: a0.2-22w23c
+# version: 22w23d
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -45,7 +46,7 @@ def loadB():
     cur.execute('select * from data')
     cache = cur.fetchone()
     ver = cache[6]
-    basic = [cache[2],cache[3],cache[4],cache[5],cache[12]]
+    basic = [cache[2],cache[3],cache[4],cache[5],cache[13]]
     clearTokenInfo = cache[11]
     cur.close()
     con.close()
@@ -510,6 +511,7 @@ def feedback(jump=0):
         print(language.couldtGetFeedbackServerInfo)
         log.warning('Could\'t get feedback server information')
         log.exception(e)
+        return None
     else:
         log.info('Got feedback server information')
     cache = json_loads(cache)
@@ -525,7 +527,7 @@ def feedback(jump=0):
                         password = feedbackInfo[1]
                     data = {'account':databaseCache[9],'password':password}
                     try:
-                        cache = requests_post(feedback_api + '/login',data).text
+                        cache = requests_post(feedback_api + '/login',json=data).text
                     except Exception as e:
                         print(language.couldtLogin)
                         log.warning('Could\'t login')
@@ -547,8 +549,10 @@ def feedback(jump=0):
                         else:
                             print(language.unknownError)
                             log.warning('Login to feedback server:"{}" error[:]unknown error'.format(databaseCache[10]))
-                        while feedback_type in ['bug','warn','debug']:
+                        while True:
                             feedback_type = input(language.feedbackType)
+                            if feedback_type in ['bug','warn','debug','want']:
+                                break
                         lines = []
                         feedback_info = input(language.feedbackInfo)
                         while feedback_info != ':w':
@@ -560,7 +564,7 @@ def feedback(jump=0):
                             text += '\n'
                         data = {'account':databaseCache[9],'password':feedbackInfo[1],'feedback-type':feedback_type,'feedback-info':feedback_info}
                         try:
-                            cache = requests_post('https://feedback-githut.macwinlin.ml/feedback').text
+                            cache = requests_post('https://feedback-githut.macwinlin.ml/feedback',json=data).text
                         except Exception as e:
                             print(language.couldtFeedback + databaseCache[10] + '".')
                             log.warning('Could\'t feedback to "{}"'.format(databaseCache[10]))
@@ -679,7 +683,6 @@ def run(data):
         print("'{}'".format(data) + language.notc)
         log.warning('Command not found')
 # Exit
-@atexit.register
 def clearToken():
     if clearTokenInfo == 1:
         con = sqlite3.connect('.mwl-githut-data.db')
@@ -689,6 +692,7 @@ def clearToken():
         con.commit()
         cur.close()
         con.close()
+register(clearToken)
 # Autologin
 if basic[2] == 1:
     print(language.alogin)

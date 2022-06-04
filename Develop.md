@@ -17,8 +17,6 @@
 
 If you try to develop other version,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
-## Version
-
 ### GitHub Tools GUI Application
 
 If you try to develop GUI application,please use this project's core.But you can use other cores,too.
