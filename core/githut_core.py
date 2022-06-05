@@ -1,5 +1,6 @@
 # coding=utf-8
 import sqlite3
+from hashlib import sha256
 from atexit import register
 from ipaddress import ip_address as ipv
 from platform import platform
@@ -20,7 +21,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w23d
+# version: 22w23e
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -525,7 +526,7 @@ def feedback(jump=0):
                         feedbackInfo = [1,password]
                     else:
                         password = feedbackInfo[1]
-                    data = {'account':databaseCache[9],'password':password}
+                    data = {'account':databaseCache[9],'password':sha256(password.encode()).hexdigest()}
                     try:
                         cache = requests_post(feedback_api + '/login',json=data).text
                     except Exception as e:
@@ -555,16 +556,18 @@ def feedback(jump=0):
                                 break
                         lines = []
                         feedback_info = input(language.feedbackInfo)
-                        while feedback_info != ':w':
+                        while True:
                             lines.append(feedback_info)
                             feedback_info = input()
+                            if feedback_info == ':w':
+                                break
                         text = ''
                         for i in range(len(lines)):
                             text += lines[i]
                             text += '\n'
-                        data = {'account':databaseCache[9],'password':feedbackInfo[1],'feedback-type':feedback_type,'feedback-info':feedback_info}
+                        data = {'account':databaseCache[9],'password':sha256(feedbackInfo[1].encode()).hexdigest(),'feedback-type':feedback_type,'feedback-info':feedback_info}
                         try:
-                            cache = requests_post('https://feedback-githut.macwinlin.ml/feedback',json=data).text
+                            cache = requests_post(feedback_api + '/feedback',json=data).text
                         except Exception as e:
                             print(language.couldtFeedback + databaseCache[10] + '".')
                             log.warning('Could\'t feedback to "{}"'.format(databaseCache[10]))
