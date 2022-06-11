@@ -10,7 +10,7 @@ from shutil import rmtree
 # file: main.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0.1
+# version: LTS(Long Term Support) 1.0.2
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -33,6 +33,7 @@ disable ipv4                    Disable IPv4
 disable ipv6                    Disable IPv6
 disable AGJ                     Disable Auto Generate Json
 domain <http://[domain]>        Set Domain[Program will auto add port 5000;want to you to add http:// or other]
+name                            Change Feedback Server Name
 run                             Launch API Module
 exit                            Exit Program''')
         # Change password
@@ -165,6 +166,16 @@ exit                            Exit Program''')
             SQLcur = con.cursor()
             SQLcur.execute("UPDATE basicData SET domain='{}' WHERE id=1".format(tml[7:] + ':5000'))
             con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml[:4] == 'name':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            if tml[5:] != 'MacWinLin Studio CGK Team':
+                SQLcur.execute("UPDATE basicData SET name='{}' WHERE id=1".format(tml[5:]))
+                con.commit()
+            else:
+                sysExit(1)
             SQLcur.close()
             con.close()
         elif tml == 'run':

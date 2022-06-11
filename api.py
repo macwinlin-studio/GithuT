@@ -16,8 +16,8 @@ from platform import platform
 # file: api.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0.1
-# Publish only on GitHub
+# version: LTS(Long Term Support) 1.0.2
+# Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
 # Code
@@ -41,8 +41,8 @@ def genRandomString(lenA=1,lenB=5):
 def createDatabase():
     con = sqlite3.connect('.mwl-githut-fb-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS basicData(id INTEGER PRIMARY KEY,register INTEGER NOT NULL DEFAULT 0,registerOrganization INTEGER NOT NULL DEFAULT 0,domain TEXT NOT NULL DEFAULT 'http://127.0.0.1:5000',autoGenJson INTEGER NOT NULL DEFAULT 1,ipv4 INTEGER NOT NULL DEFAULT 1,ipv6 INTEGER NOT NULL DEFAULT 0)")
-    cur.execute("INSERT INTO basicData VALUES (1,0,0,'http://127.0.0.1:5000',1,1,0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS basicData(id INTEGER PRIMARY KEY,register INTEGER NOT NULL DEFAULT 0,registerOrganization INTEGER NOT NULL DEFAULT 0,domain TEXT NOT NULL DEFAULT 'http://127.0.0.1:5000',autoGenJson INTEGER NOT NULL DEFAULT 1,ipv4 INTEGER NOT NULL DEFAULT 1,ipv6 INTEGER NOT NULL DEFAULT 0,name TEXT NOT NULL DEFAULT 'Unknown')")
+    cur.execute("INSERT INTO basicData VALUES (1,0,0,'http://127.0.0.1:5000',1,1,0,'Unknown')")
     cur.execute("CREATE TABLE IF NOT EXISTS account(email TEXT NOT NULL,pwd TEXT NOT NULL,userLevel INTEGER NOT NULL DEFAULT 0,block INTEGER NOT NULL DEFAULT 0,userType INTEGER NOT NULL DEFAULT 0)")
     randomPassword = genRandomString()
     randomPasswordSHA256 = sha256(randomPassword.encode()).hexdigest()
@@ -62,6 +62,7 @@ if not exists('.mwl-githut-fb-data.db'):
 
 enableRegister = None
 enableRegisterOrganization = None
+orgName = None
 def verifyEmail(email):
     ex_email = re_compile(r'^[\w][a-zA-Z1-9.]{4,19}@[a-zA-Z0-9]{2,3}.[com|gov|net]')
     result = ex_email.match(email)
@@ -72,6 +73,7 @@ def verifyEmail(email):
 def start(register,registerOrganization):
     global enableRegister
     global enableRegisterOrganization
+    global orgName
     if register == 0:
         enableRegister = True
     else:
@@ -86,6 +88,7 @@ def start(register,registerOrganization):
     cache = cur.fetchone()
     cur.close()
     con.close()
+    orgName = cache[7]
     if cache[4] == 1:
         mkdir('feedback')
         if osname == 'nt':
@@ -129,19 +132,19 @@ def login():
             if cur.fetchone()[0] == 0:
                 cur.close()
                 con.close()
-                return jsonify({'code':200})
+                return jsonify({'code':200,'org':orgName})
             else:
                 cur.close()
                 con.close()
-                return jsonify({'code':403})
+                return jsonify({'code':403,'org':orgName})
         else:
             cur.close()
             con.close()
-            return jsonify({'code':401})
+            return jsonify({'code':401,'org':orgName})
     else:
         cur.close()
         con.close()
-        return jsonify({'code':404})
+        return jsonify({'code':404,'org':orgName})
 @app.route('/feedback/',methods=['POST'])
 def feedback():
     email = request.json.get('account')
@@ -168,23 +171,23 @@ def feedback():
                         writeFeedback(account=email,accountLevel='organization',level=FBtype,info=FBinfo)
                     cur.close()
                     con.close()
-                    return jsonify({'code':200})
+                    return jsonify({'code':200,'org':orgName})
                 else:
                     cur.close()
                     con.close()
-                    return jsonify({'code':403})
+                    return jsonify({'code':403,'org':orgName})
             else:
                 cur.close()
                 con.close()
-                return jsonify({'code':401})
+                return jsonify({'code':401,'org':orgName})
         else:
             cur.close()
             con.close()
-            return jsonify({'code':404})
+            return jsonify({'code':404,'org':orgName})
     else:
         cur.close()
         con.close()
-        return jsonify({'code':400})
+        return jsonify({'code':400,'org':orgName})
 @app.route('/change',methods=['POST'])
 def change():
     email = request.json.get('account')
@@ -206,19 +209,19 @@ def change():
                 con.commit()
                 cur.close()
                 con.close()
-                return jsonify({'code':200})
+                return jsonify({'code':200,'org':orgName})
             else:
                 cur.close()
                 con.close()
-                return jsonify({'code':403})
+                return jsonify({'code':403,'org':orgName})
         else:
             cur.close()
             con.close()
-            return jsonify({'code':401})
+            return jsonify({'code':401,'org':orgName})
     else:
         cur.close()
         con.close()
-        return jsonify({'code':404})
+        return jsonify({'code':404,'org':orgName})
 @app.route('/register',methods=['POST'])
 def register():
     if enableRegister:
@@ -237,17 +240,17 @@ def register():
                 con.commit()
                 cur.close()
                 con.close()
-                return jsonify({'code':200})
+                return jsonify({'code':200,'org':orgName})
             else:
                 cur.close()
                 con.close()
-                return jsonify({'code':400})
+                return jsonify({'code':400,'org':orgName})
         else:
             cur.close()
             con.close()
-            return jsonify({'code':409})
+            return jsonify({'code':409,'org':orgName})
     else:
-        return jsonify({'code':400})
+        return jsonify({'code':400,'org':orgName})
 @app.route('/register-organization',methods=['POST'])
 def registerOrganization():
     if enableRegisterOrganization:
@@ -266,17 +269,17 @@ def registerOrganization():
                 con.commit()
                 cur.close()
                 con.close()
-                return jsonify({'code':200})
+                return jsonify({'code':200,'org':orgName})
             else:
                 cur.close()
                 con.close()
-                return jsonify({'code':400})
+                return jsonify({'code':400,'org':orgName})
         else:
             cur.close()
             con.close()
-            return jsonify({'code':409})
+            return jsonify({'code':409,'org':orgName})
     else:
-        return jsonify({'code':400})
+        return jsonify({'code':400,'org':orgName})
 
 
 def writeFeedback(account,accountLevel,level,info):
