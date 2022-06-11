@@ -3,6 +3,9 @@ import sqlite3,datetime
 from atexit import register as registerExit
 from flask import Flask,request,jsonify
 from re import compile as re_compile
+from os import mkdir
+from os import name as osname
+from json import loads
 # Database
 from hashlib import sha256
 from os.path import exists
@@ -13,8 +16,9 @@ from platform import platform
 # file: api.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support)
+# version: LTS(Long Term Support) 1.0.1
 # Publish only on GitHub
+# Copyright 2022 MacWinLin Studio.All rights reserved.
 
 # Code
 
@@ -37,8 +41,8 @@ def genRandomString(lenA=1,lenB=5):
 def createDatabase():
     con = sqlite3.connect('.mwl-githut-fb-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS basicData(id INTEGER PRIMARY KEY,register INTEGER NOT NULL DEFAULT 0,registerOrganization INTEGER NOT NULL DEFAULT 0)")
-    cur.execute("INSERT INTO basicData VALUES (1,0,0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS basicData(id INTEGER PRIMARY KEY,register INTEGER NOT NULL DEFAULT 0,registerOrganization INTEGER NOT NULL DEFAULT 0,domain TEXT NOT NULL DEFAULT 'http://127.0.0.1:5000',autoGenJson INTEGER NOT NULL DEFAULT 1,ipv4 INTEGER NOT NULL DEFAULT 1,ipv6 INTEGER NOT NULL DEFAULT 0)")
+    cur.execute("INSERT INTO basicData VALUES (1,0,0,'http://127.0.0.1:5000',1,1,0)")
     cur.execute("CREATE TABLE IF NOT EXISTS account(email TEXT NOT NULL,pwd TEXT NOT NULL,userLevel INTEGER NOT NULL DEFAULT 0,block INTEGER NOT NULL DEFAULT 0,userType INTEGER NOT NULL DEFAULT 0)")
     randomPassword = genRandomString()
     randomPasswordSHA256 = sha256(randomPassword.encode()).hexdigest()
@@ -76,6 +80,34 @@ def start(register,registerOrganization):
         enableRegisterOrganization = True
     else:
         enableRegisterOrganization = False
+    con = sqlite3.connect('.mwl-githut-fb-data.db')
+    cur = con.cursor()
+    cur.execute('select * from basicData')
+    cache = cur.fetchone()
+    cur.close()
+    con.close()
+    if cache[4] == 1:
+        mkdir('feedback')
+        if osname == 'nt':
+            jsonFile = open(r'feedback\feedback.json','w')
+        else:
+            jsonFile = open('feedback/feedback.json','w')
+        if cache[5] == 0:
+            ipv4 = 'false'
+        else:
+            ipv4 = 'true'
+        if cache[6] == 0:
+            ipv6 = 'false'
+        else:
+            ipv6 = 'true'
+        jsonFile.write('"enabled":true,"ipv4":{},"ipv6":{},"link":"{}"'.format(ipv4,ipv6,cache[3]))
+        jsonFile.close()
+        if osname == 'nt':
+            jsonFile = open(r'feedback\feedback-organization.json','w')
+        else:
+            jsonFile = open('feedback/feedback-organization.json','w')
+        jsonFile.write('"enabled":true,"ipv4":{},"ipv6":{},"link::"{}"'.format(ipv4,ipv6,cache[3]))
+        jsonFile.close()
 app = Flask(__name__)
 file = open('feedbacks.txt','a')
 now = datetime.datetime.now()
@@ -251,6 +283,33 @@ def writeFeedback(account,accountLevel,level,info):
     global file
     file.write('{} - {} - {} - {} - {}\n'.format(now.strftime('%Y-%m-%d %H:%M:%S'),account,accountLevel,level,info))
 def clean():
+    con = sqlite3.connect('.mwl-githut-fb-data.db')
+    cur = con.cursor()
+    cur.execute('select * from basicData')
+    cache = cur.fetchone()
+    cur.close()
+    con.close()
+    if cache[4] == 1:
+        if cache[5] == 0:
+            ipv4 = 'false'
+        else:
+            ipv4 = 'true'
+        if cache[6] == 0:
+            ipv6 = 'false'
+        else:
+            ipv6 = 'true'
+        if osname == 'nt':
+            jsonFile = open(r'feedback\feedback.json','w')
+        else:
+            jsonFile = open('feedback/feedback.json','w')
+        jsonFile.write('"enabled":false,"ipv4":{},"ipv6":{},"link":"{}"'.format(ipv4,ipv6,cache[3]))
+        jsonFile.close()
+        if osname == 'nt':
+            jsonFile = open(r'feedback\feedback-organization.json','w')
+        else:
+            jsonFile = open('feedback/feedback-organization.json','w')
+        jsonFile.write('"enabled":false,"ipv4":{},"ipv6":{},"link":"{}"'.format(ipv4,ipv6,cache[3]))
+        jsonFile.close()
     file.close()
 registerExit(clean)
 def run():

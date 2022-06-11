@@ -1,14 +1,16 @@
 # coding=utf-8
 import sqlite3,api
 from os import name,system
+from os.path import isdir
 from sys import exit as sysExit
 from hashlib import sha256
 from getpass import getpass
+from shutil import rmtree
 # project: GitHub Tools Feedback Serve
 # file: main.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0
+# version: LTS(Long Term Support) 1.0.1
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -21,9 +23,16 @@ def main(user,cur='#',level=2):
         if tml == 'help':
             print('''CPwd                            Change Password
 enable register                 Enable Register
-enable register-organization    Enable Register Organization
+enable rOG                      Enable Register Organization
+enable ipv4                     Enable IPv4
+enable ipv6                     Enable IPv6
+enable AGJ                      Enable Auto Generate Json
 disable register                Disable Register
-disable register-organization   Disable Register Organization
+disable rOG                     Disable Register Organization
+disable ipv4                    Disable IPv4
+disable ipv6                    Disable IPv6
+disable AGJ                     Disable Auto Generate Json
+domain <http://[domain]>        Set Domain[Program will auto add port 5000;want to you to add http:// or other]
 run                             Launch API Module
 exit                            Exit Program''')
         # Change password
@@ -56,7 +65,7 @@ exit                            Exit Program''')
                 con.commit()
             else:
                 print('Your level is low,could\'t operate')
-        elif tml == 'enable register-organization':
+        elif tml == 'enable rOG':
             con = sqlite3.connect('.mwl-githut-fb-data.db')
             SQLcur = con.cursor()
             if level >= 2:
@@ -64,7 +73,7 @@ exit                            Exit Program''')
                 con.commit()
             else:
                 print('Your level is low,could\'t operate')
-        elif tml == 'disable register-organization':
+        elif tml == 'disable rOG':
             con = sqlite3.connect('.mwl-githut-fb-data.db')
             SQLcur = con.cursor()
             if level >= 2:
@@ -108,6 +117,56 @@ exit                            Exit Program''')
                     print('Didn\'t have {} account'.format(name))
             else:
                 print('Your level is low,could\'t operate')
+        elif tml == 'enable ipv4':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET ipv4=1 WHERE id=1')
+            con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml == 'enable ipv6':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET ipv6=1 WHERE id=1')
+            con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml == 'disable ipv4':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET ipv4=0 WHERE id=1')
+            con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml == 'disable ipv6':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET ipv6=0 WHERE id=1')
+            con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml == 'enable AGJ':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET autoGenJson=1 WHERE id=1')
+            con.commit()
+            SQLcur.close()
+            con.close()
+        elif tml == 'disable AGJ':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute('UPDATE basicData SET autoGenJson=0 WHERE id=1')
+            SQLcur.close()
+            con.close()
+            if isdir('feedback'):
+                rmtree('feedback')
+        elif tml[:6] == 'domain':
+            con = sqlite3.connect('.mwl-githut-fb-data.db')
+            SQLcur = con.cursor()
+            SQLcur.execute("UPDATE basicData SET domain='{}' WHERE id=1".format(tml[7:] + ':5000'))
+            con.commit()
+            SQLcur.close()
+            con.close()
         elif tml == 'run':
             print('Please send your feedback file to githut@macwinlin.ml every month(enter your feedback organization username)')
             con = sqlite3.connect('.mwl-githut-fb-data.db')
@@ -126,7 +185,13 @@ def clearScreen():
     else:
         system('clear')
 if __name__ == '__main__':
-    print('GitHub Tools Feedback Serve 1.0')
+    print(r'''                                                                                                                                                                                                 
+                                                                                                                                                                                                 
+    //   ) )                             /__  ___/       //   / /                                                                 //   ) )                                                ___    
+   //        ( ) __  ___ / __              / /          //___   ___      ___      ___   / / __      ___      ___     / ___       ((         ___      __              ___       /_  /    //   ) ) 
+  //  ____  / /   / /   //   ) ) //   / / / /          / ___  //___) ) //___) ) //   ) / //   ) ) //   ) ) //   ) ) //\ \          \\     //___) ) //  ) ) ||  / / //___) )     / /    //   / /  
+ //    / / / /   / /   //   / / //   / / / /          //     //       //       //   / / //   / / //   / / //       //  \ \           ) ) //       //       || / / //           / /    //   / /   
+((____/ / / /   / /   //   / / ((___( ( / /          //     ((____   ((____   ((___/ / ((___/ / ((___( ( ((____   //    \ \   ((___ / / ((____   //        ||/ / ((____       / /   (|(___/ /    ''')
     print('This project don\'t generate register website,only generate API')
     con = sqlite3.connect('.mwl-githut-fb-data.db')
     cur = con.cursor()
