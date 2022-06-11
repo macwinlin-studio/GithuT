@@ -1,9 +1,10 @@
 {
-    "owner":"MacWinLin Studio CGK Team",
+    "org":"MacWinLin Studio CGK Team",
     "version":1.0,
     "data":[
         {"level":3,"time":"2022-06-10","text":"Snapshot 22w24a published."},
         {"level":3,"time":"2022-06-10","text":"GitHub Tools's website is using."},
-        {"level":3,"time":"2022-06-10","text":"Notice 1.0 published."}
+        {"level":3,"time":"2022-06-10","text":"Notice 1.0 published."},
+        {"level":3,"time":"2022-06-11","text":"GitHub Tools website update to 1.0.1"}
     ]
 }
