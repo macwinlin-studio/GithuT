@@ -3,22 +3,11 @@
 # file: shell.py
 # author: MacWinLin Studio CGK Team
 # email: mwl@macwinlin.ml
-# version: LTS(Long Term Support) 2.0
+# version: LTS(Long Term Support) 2.0.1
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # Make unofficial GUI client please view core file.
-print('Github Tools Shell 1.0')
-print(''' GitHub GitHub GitHub GitHub GitHub GitHub GitHub 
-T-----=-----  --------    ---------   |           T
-O     |      =        =  =         =  |           O
-O     |     |          ||           | |           O
-T     |     |          ||           | |           L
-T     |     |          ||           | |           T
-O     |     |          ||           | |           O
-O     |      =        =  =         =  |           O
-L     |       --------    ---------   =---------  L
- MacWinLin MacWinLin MacWinLin MacWinLin MacWinLin ''')
-from re import L
+print('Github Tools Shell 2.0.1')
 from core.language_core import UpdateLanguage,cdatabase,rdatabase
 from core.githut_core import run
 from requests import get
@@ -29,28 +18,6 @@ from shutil import rmtree
 import sqlite3,logging
 language = UpdateLanguage
 language.reload(self=language)
-def main(state=0):
-    if state == 0:
-        while True:
-            tml = input('>')
-            if tml != 'update':
-                run(tml)
-            else:
-                updateFunction()
-class Update():
-    def latest(self):
-        try:
-            cache = get('https://githut.macwinlin.ml/update/latest.json')
-        except Exception:
-            log.warning('Could\'t get latest GitHub Tools version')
-            return ['error']
-        else:
-            cache = cache.text
-            cache = loads(cache)
-            self.latestVersion = cache['latest']
-            self.latestVersionLink = cache['link']
-            self.updateFile = cache['files']
-            return [self.latestVersion,self.latestVersionLink,self.updateFile]
 class logClass:
     def __init__():
         logging.basicConfig(level=logging.DEBUG,filemode='a+',filename='githut-log.log',format="%(asctime)s - %(name)s - %(levelname)-9s - %(filename)-8s : %(lineno)s line - %(message)s",datefmt="%Y-%m-%d %H:%M:%S")
@@ -67,7 +34,6 @@ class logClass:
     def exception(e):
         logging.exception(e)
 log = logClass
-update = Update
 # Connect to database and config basic information
 con = sqlite3.connect('.mwl-githut-data.db')
 log.info('Connected to database')
@@ -76,8 +42,38 @@ cur.execute('select * from data')
 cache = cur.fetchone()
 ver = cache[6]
 auto = cache[7]
+updateServer = cache[12]
 cur.close()
 con.close()
+def main(state=0):
+    if state == 0:
+        while True:
+            tml = input('>')
+            if tml != 'update':
+                run(tml)
+            else:
+                updateFunction()
+class Update():
+    def latest(self):
+        updateServerList = updateServer.split('/')
+        if updateServerList[1] == '':
+            updateServerNotHttp = updateServerList[2]
+        else:
+            updateServerNotHttp = updateServerList[1]
+        try:
+            cache = get(updateServer + '/latest.json')
+            cache = cache.text
+            cache = loads(cache)
+            print('Queried {}({})'.format(cache['org'],updateServerNotHttp))
+            self.latestVersion = cache['latest']
+            self.latestVersionLink = cache['link']
+            self.updateFile = cache['files']
+        except Exception:
+            log.warning('Could\'t get latest GitHub Tools version')
+            return ['error']
+        else:
+            return [self.latestVersion,self.latestVersionLink,self.updateFile]
+update = Update
 def haveField(cur,field):
     try:
         cur.execute('select {} from data where id=1'.format(field))

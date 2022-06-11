@@ -17,7 +17,7 @@ import log_core as log
 # file: backup_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0
+# version: 22w24b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -34,7 +34,7 @@ class Backup():
         cur = con.cursor()
         cur.execute("select * from data")
         cache = cur.fetchone()
-        cache2 = {'ver':1.1,'data':[cache[1],cache[2],cache[3],cache[4],cache[5],'a0.2-22w22a',cache[7]]}
+        cache2 = {'ver':1.2,'data':[*cache[1:6],'a0.2-22w24b',cache[7:]]}
         # JSON
         self.backup = dumps(cache2)
         date = time_date.today()
@@ -261,16 +261,41 @@ class Import():
                 else:
                     print(language.read)
                 # Import to database
-                if ver == 1.1:
+                if ver == 1.2:
                     log.info('Support this backup module version')
                     print(language.ver)
-                    if len(data) == 7:
+                    if len(data) == 11:
                         con = sqlite3.connect('.mwl-githut-data.db')
                         cur = con.cursor()
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w22a',{})".format(*data)
+                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w24b',{},{},'{}','{}',{})".format(*data)
                             cur.execute(cache)
+                            con.commit()
+                        except Exception as e:
+                            con.rollback()
+                            print(language.importE)
+                            log.warning('Could\'t import backup data to database')
+                            log.exception(e)
+                        else:
+                            print(language.importS)
+                            log.info('Imported backup data to database')
+                        cur.close()
+                        con.close()
+                    else:
+                        print(language.lenE)
+                elif ver == 1.1:
+                    log.info('Support this backup module version')
+                    con = sqlite3.connect('.mwl-githut-data.db')
+                    cur = con.cursor()
+                    cur.execute('select * from data')
+                    cache = cur.fetchone()
+                    print(language.ver)
+                    if len(data) == 7:
+                        try:
+                            cur.execute("DELETE FROM data WHERE id=1")
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w24b',{},{},'{}','{}')".format(*data,cache[8:])
+                            cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:
                             con.rollback()
@@ -295,7 +320,7 @@ class Import():
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
                             cache = ''
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w22a',{})".format(*data,cache[7])
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w24b',{})".format(*data,cache[7:])
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:

@@ -10,7 +10,7 @@ from os import popen as os_popen
 # file: language_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: LTS(Long Term Support) 1.0
+# version: 22w24b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w22a',updateT INTEGER NOT NULL DEFAULT 1)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w22a',1)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w24b',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update',debug INTEGER NOT NULL DEFAULT 0)")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w24b',1,0,'123456','https://githut.macwinlin.ml',0,'https://githut.macwinlin.ml/update',0)")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -42,7 +42,7 @@ def cdatabase():
         os_popen('attrib +H .mwl-githut-data.db')
 # Define Read Database
 def rdatabase():
-    return ['id','language','htoken','token','alogin','developM','version','update']
+    return ['id','language','htoken','token','alogin','developM','version','updateT','feedback','feedback_admin']
 # Create Database
 if not os_path_isfile('.mwl-githut-data.db'):
     if os_path_isdir('.mwl-githut-data.db'):
@@ -67,12 +67,12 @@ class languageC():
             self.aboutAMTverN = '版本更新时间:2022年5月21日'
             self.aboutAMTblog = '打开MWL工作室博客,请使用githut -ao'
             self.githutH = '''您可以使用这些命令：
--a | --author    关于作者
+-a | --author          关于作者
 -ao | --author-open    打开MacWinLin工作室博客
--p | --program    关于程序
--po | --program-open 打开GitHub仓库
--l | --license    查看开源协议
--c | --copyright    查看版权信息'''
+-p | --program         关于程序
+-po | --program-open   打开GitHub仓库
+-l | --license         查看开源协议
+-c | --copyright       查看版权信息'''
             self.help = '''你可以使用这些命令：
 help      帮助
 githut    关于
@@ -81,14 +81,20 @@ login     登录
 redata    重新生成数据库
 backup    备份数据库
 create    创建任何
-import    导入备份'''
+import    导入备份
+feedback  反馈至CGK团队'''
+            self.peToken = '请输入Token！'
             self.hToken = '请先删除Token。'
             self.nhToken = '请先添加Token。'
             self.configH = '''您可以使用这些命令：
 language <language>                   更改GithuT语言
-token [add | remove] <github-token>              更改GitHub Token
-autologin [-y/--yes | -n/--no]    启用/禁用自动登录
-develop [-y/--yes | -n/--no]      启用/禁用开发模式'''
+token [add | remove] <github-token>   更改GitHub Token
+autologin [-y/--yes | -n/--no]        启用/禁用自动登录
+develop [-y/--yes | -n/--no]          启用/禁用开发模式
+feedback <link>                       更改反馈服务器链接
+ct [-y/--yes | -n/--no]               退出前清除Token
+update [-y/--yes | -n/--no]           启用/禁用自动检查更新
+UPS <link>                            更改更新服务器链接'''
             self.licenseE = '无法加载协议，请确认您连接到网络。'
             self.accountH = '''您可以使用这些命令：
 -u | --user         设置账号类型为个人
@@ -122,6 +128,41 @@ repo <RepoName>    创建GitHub仓库'''
             self.NdmN = '请先启用开发模式！'
             self.deleteH = '''您可以使用以下命令：
 repo <RepoName>    删除GitHub仓库'''
+            self.couldtGetFeedbackServerInfo = '无法获取反馈服务器信息。'
+            self.feedbackServerClose = '反馈服务器已关闭。'
+            self.notSupportIPv6 = '您的电脑不支持IPv6。'
+            self.feedbackGetAdmin = '请输入您的反馈用户名：'
+            self.feedbackGetPassword = '请输入您的反馈密码：'
+            self.couldtLogin = '无法登录。'
+            self.loginSuccess = '登录成功。'
+            self.passwordError = '密码错误，请输入正确的密码。'
+            self.userNotFound = '此用户不存在。'
+            self.serverError = '反馈服务器错误。'
+            self.unknownError = '未知错误。'
+            self.feedbackType = '请选择反馈类型(bug/warn/debug)：'
+            self.feedbackInfo = '请输入反馈信息(单独输入":w"以退出):\n'
+            self.couldtFeedback = '无法反馈至"'
+            self.feedbackSuccess = '反馈成功。'
+            self.blocked = '您的反馈账号已被封禁。'
+            self.ctY = '清除Token已启用！'
+            self.ctN = '清除Token已禁用！'
+            self.NctY = '请先禁用清除Token！'
+            self.NctN = '请先启用清除Token！'
+            self.acuY = '自动检查更新已启用！'
+            self.acuN = '自动检查更新已禁用！'
+            self.NacuY = '请先禁用自动检查更新！'
+            self.NacuN = '请先启用自动检查更新！'
+            self.debugY = '调试模式已启用！'
+            self.debugN = '调试模式已禁用！'
+            self.NdebugY = '请先禁用调试模式！'
+            self.NdebugN = '请先启用调试模式！'
+            self.couldtNotice = '无法获取公告。'
+            self.noticeLvN = '空等级公告：'
+            self.noticeLvU = '未知等级公告：'
+            self.noticeLv0 = '0级公告：'
+            self.noticeLv1 = '1级公告：'
+            self.noticeLv2 = '2级公告：'
+            self.noticeLv3 = '3级公告：'
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
@@ -152,15 +193,22 @@ login     Login GitHub Account
 redata    Rebuild Database
 backup    Backup Database
 create    Create Any
-import    Import Backup'''
+import    Import Backup
+feedback  Feedback to MWL CGK Team'''
             # About Token Text
+            self.peToken = 'Please enter token!'
             self.hToken = 'Please delete the token first.'
             self.nhToken = 'Please add the token first.'
             self.configH = '''You can use these command:
-language <language>               Change GithuT Language
-token [add | remove] <github-token>              Change GitHub Token
-autologin [-y/--yes | -n/--no]    Enable/Disable Autologin
-develop [-y/--yes | -n/--no]       Enable/Disable Devlop Mode'''
+language <language>                   Change GithuT Language
+token [add | remove] <github-token>   Change GitHub Token
+autologin [-y/--yes | -n/--no]        Enable/Disable Autologin
+develop [-y/--yes | -n/--no]          Enable/Disable Develop Mode
+feedback <link>                       Change Feedback Server Link
+ct [-y/--yes | -n/--no]               Clear Token In Exit Program
+update [-y/--yes | -n/--no]           Enable/Disable Auto Check Update
+UPS <link>                            Change Update Server
+debug [-y/--yes | -n/--no]            Enable/Disable Debug Mode'''
             self.licenseE = 'Could\'t load license,please confirm you connect the network.'
             self.accountH = '''You can use these command:
 -u | --user           Set The Account Type To Individual
@@ -193,17 +241,57 @@ repo <RepoName>    Create GitHub Repository'''
             # =Repo
             self.crepoE = 'Could\'t create repository.'
             self.crepoS = 'The repository was created successfully!'
-            # Devlop Mode
-            self.dmY = 'Devlop mode is enable now!'
-            self.dmN = 'Devlop mode is disable now!'
-            self.NdmY = 'Please disable devlop mode first!'
-            self.NdmN = 'Please enable devlop mode first!'
+            # Develop Mode
+            self.dmY = 'Develop mode is enable now!'
+            self.dmN = 'Develop mode is disable now!'
+            self.NdmY = 'Please disable develop mode first!'
+            self.NdmN = 'Please enable develop mode first!'
             # Delete
             self.deleteH = '''You can use these command:
 repo <RepoName>    Delete GitHub Repository'''
             # =Repo
             self.drepoE = 'Could\'t delete repository.'
             self.drepoS = 'The repository was deleted successfully!'
+            # Feedback
+            self.couldtGetFeedbackServerInfo = 'Could\'t get feedback server information.'
+            self.feedbackServerClose = 'Feedback server is closed.'
+            self.notSupportIPv6 = 'Your computer not support IPv6.'
+            self.feedbackGetAdmin = 'Please enter your feedback username:'
+            self.feedbackGetPassword = 'Please enter your feedback passowrd:'
+            self.couldtLogin = 'Could\'t login.'
+            self.loginSuccess = 'Login successful.'
+            self.passwordError = 'Password error,please enter right password.'
+            self.userNotFound = 'This user is not exist.'
+            self.serverError = 'Feedback server error.'
+            self.unknownError = 'Unknown error.'
+            self.feedbackType = 'Please select feedback type(bug/warn/debug):'
+            self.feedbackInfo = 'Please enter feedback info(alone enter ":w" to exit):\n'
+            self.couldtFeedback = 'Could\'t feedback to "'
+            self.feedbackSuccess = 'Feedback successful.'
+            self.blocked = 'Your feedback account was blocked.'
+            # Clear Token
+            self.ctY = 'Clear token is enable now!'
+            self.ctN = 'Clear token is disable now!'
+            self.NctY = 'Please disable clear token first!'
+            self.NctN = 'Please enable clear token first!'
+            # Auto Check Update
+            self.acuY = 'Auto check update is enable now!'
+            self.acuN = 'Auto check update is disable now!'
+            self.NacuY = 'Please disable auto check update first!'
+            self.NacuN = 'Please enable auto check update first!'
+            # Debug Mode
+            self.debugY = 'Debug mode is enable now!'
+            self.debugN = 'Debug mode is disable now!'
+            self.NdebugY = 'Please disable debug mode first!'
+            self.NdebugN = 'Please enable debug mode first!'
+            # Notice
+            self.couldtNotice = 'Could\'t get notice.'
+            self.noticeLvN = 'Null level notice:'
+            self.noticeLvU = 'Unknown level notice:'
+            self.noticeLv0 = 'Level 0 notice:'
+            self.noticeLv1 = 'Level 1 notice:'
+            self.noticeLv2 = 'Level 2 notice:'
+            self.noticeLv3 = 'Level 3 notice:'
 class BackupLanguage():
     def __init__(self):
         self.lList = ['zh-cn','en-us']
