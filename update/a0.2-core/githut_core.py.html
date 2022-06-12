@@ -21,7 +21,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w24a
+# version: 22w24b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -341,8 +341,11 @@ def config(data):
         cache = get(4,data)
         con = sqlite3.connect('.mwl-githut-data.db')
         cur = con.cursor()
-        cur.execute("UPDATE data SET ups='?' WHERE id=1".format(cache))
-        con.commit()
+        if cache[:7] == 'http://' or cache[:8] == 'https://':
+            cur.execute("UPDATE data SET ups='{}' WHERE id=1".format(cache))
+            con.commit()
+        else:
+            print(language.cerror)
         cur.close()
         con.close()
     # Debug Mode
@@ -501,6 +504,12 @@ def feedback(jump=0):
             return True
         else:
             return False
+    def domainNotHttp(domain):
+        domainList = domain.split('/')
+        if domainList[1] == '':
+            return domainList[2]
+        else:
+            return domainList[1]
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
     cur.execute('select * from data')
@@ -536,6 +545,8 @@ def feedback(jump=0):
                     else:
                         try:
                             cache = json_loads(cache)
+                            temp = cache['code']
+                            print('Feedback server:{}({})'.format(cache['org'],domainNotHttp(feedback_api)))
                         except Exception:
                             log.warning('Could\'t load JSON')
                             cache = {'code':400}
@@ -627,6 +638,64 @@ def importF():
     cache = Import()
     if cache.isBackup == 0:
         cache.replace()
+# Get Notice
+def notice():
+    # Get notice
+    try:
+        cache = requests_get('https://githut.macwinlin.ml/notice.json').text
+        cache = json_loads(cache)
+        temp = [cache['org'],cache['version'],cache['data']]
+    # Error
+    except Exception as e:
+        print(language.couldtNotice)
+        log.warning('Could\'t get notice')
+        log.exception(e)
+    else:
+        cache = cache['data']
+        noticeLv0 = []
+        noticeLv1 = []
+        noticeLv2 = []
+        noticeLv3 = []
+        noticeLvN = []
+        noticeLvU = []
+        # Classification
+        for i in range(len(cache)):
+            if cache[i]['level'] == None:
+                noticeLvN.append([cache[i]['time'],cache[i]['text']])
+            elif cache[i]['level'] == 0:
+                noticeLv0.append([cache[i]['time'],cache[i]['text']])
+            elif cache[i]['level'] == 1:
+                noticeLv1.append([cache[i]['time'],cache[i]['text']])
+            elif cache[i]['level'] == 2:
+                noticeLv2.append([cache[i]['time'],cache[i]['text']])
+            elif cache[i]['level'] == 3:
+                noticeLv3.append([cache[i]['time'],cache[i]['text']])
+            else:
+                noticeLvU.append([cache[i]['time'],cache[i]['text']])
+        # Null Level
+        print(language.noticeLvN)
+        for i in range(len(noticeLvN)):
+            print('{} | {}'.format(*noticeLvN[i]))
+        # Level 0
+        print(language.noticeLv0)
+        for i in range(len(noticeLv0)):
+            print('{} | {}'.format(*noticeLv0[i]))
+        # Level 1
+        print(language.noticeLv1)
+        for i in range(len(noticeLv1)):
+            print('{} | {}'.format(*noticeLv1[i]))
+        # Level 2
+        print(language.noticeLv2)
+        for i in range(len(noticeLv2)):
+            print('{} | {}'.format(*noticeLv2[i]))
+        # Level 3
+        print(language.noticeLv3)
+        for i in range(len(noticeLv3)):
+            print('{} | {}'.format(*noticeLv3[i]))
+        # Unknown level
+        print(language.noticeLvU)
+        for i in range(len(noticeLvU)):
+            print('{} | {}'.format(*noticeLvU[i]))
 # Run Command
 def run(data):
     if data == 'help':
@@ -692,6 +761,8 @@ def run(data):
         else:
             print("'{}'".format(data) + language.notc)
             log.warning('Command not found')
+    elif data == 'notice':
+        notice()
     else:
         print("'{}'".format(data) + language.notc)
         log.warning('Command not found')

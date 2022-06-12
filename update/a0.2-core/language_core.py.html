@@ -10,7 +10,7 @@ from os import popen as os_popen
 # file: language_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w24a
+# version: 22w24b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -29,8 +29,8 @@ def readLanguage():
 def cdatabase():
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w23a',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update',debug INTEGER NOT NULL DEFAULT 0)")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w24a',1,0,'123456','https://githut.macwinlin.ml',0,'https://githut.macwinlin.ml/update',0)")
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w24b',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update',debug INTEGER NOT NULL DEFAULT 0)")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w24b',1,0,'123456','https://githut.macwinlin.ml',0,'https://githut.macwinlin.ml/update',0)")
     con.commit()
     # Change Default Language,Only Support Simplified Chinese,Can Add
     if 'zh' in getlanguage()[0]:
@@ -67,12 +67,12 @@ class languageC():
             self.aboutAMTverN = '版本更新时间:2022年5月21日'
             self.aboutAMTblog = '打开MWL工作室博客,请使用githut -ao'
             self.githutH = '''您可以使用这些命令：
--a | --author    关于作者
+-a | --author          关于作者
 -ao | --author-open    打开MacWinLin工作室博客
--p | --program    关于程序
--po | --program-open 打开GitHub仓库
--l | --license    查看开源协议
--c | --copyright    查看版权信息'''
+-p | --program         关于程序
+-po | --program-open   打开GitHub仓库
+-l | --license         查看开源协议
+-c | --copyright       查看版权信息'''
             self.help = '''你可以使用这些命令：
 help      帮助
 githut    关于
@@ -152,6 +152,17 @@ repo <RepoName>    删除GitHub仓库'''
             self.acuN = '自动检查更新已禁用！'
             self.NacuY = '请先禁用自动检查更新！'
             self.NacuN = '请先启用自动检查更新！'
+            self.debugY = '调试模式已启用！'
+            self.debugN = '调试模式已禁用！'
+            self.NdebugY = '请先禁用调试模式！'
+            self.NdebugN = '请先启用调试模式！'
+            self.couldtNotice = '无法获取公告。'
+            self.noticeLvN = '空等级公告：'
+            self.noticeLvU = '未知等级公告：'
+            self.noticeLv0 = '0级公告：'
+            self.noticeLv1 = '1级公告：'
+            self.noticeLv2 = '2级公告：'
+            self.noticeLv3 = '3级公告：'
         else:
             # About Program Part
             self.aboutPMT = 'About Program'
@@ -273,6 +284,14 @@ repo <RepoName>    Delete GitHub Repository'''
             self.debugN = 'Debug mode is disable now!'
             self.NdebugY = 'Please disable debug mode first!'
             self.NdebugN = 'Please enable debug mode first!'
+            # Notice
+            self.couldtNotice = 'Could\'t get notice.'
+            self.noticeLvN = 'Null level notice:'
+            self.noticeLvU = 'Unknown level notice:'
+            self.noticeLv0 = 'Level 0 notice:'
+            self.noticeLv1 = 'Level 1 notice:'
+            self.noticeLv2 = 'Level 2 notice:'
+            self.noticeLv3 = 'Level 3 notice:'
 class BackupLanguage():
     def __init__(self):
         self.lList = ['zh-cn','en-us']
