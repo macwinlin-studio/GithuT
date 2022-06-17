@@ -5,3 +5,5 @@ favicon.png
 README.md
 __pycache__
 .mwl-githut-data.db
+.mwl-githut-fb-data.db
+.mwl-githut-up-data.db
