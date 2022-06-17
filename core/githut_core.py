@@ -21,7 +21,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w24b
+# version: 22w25a
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
