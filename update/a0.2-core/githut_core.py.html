@@ -5,23 +5,24 @@ from atexit import register
 from ipaddress import ip_address as ipv
 from platform import platform
 from github import Github as github_Github
-from os.path import realpath as os_path_realpath
 from os.path import dirname as os_path_dirname
 from sys import path as sys_path
+from sys import exit as sys_exit
 from webbrowser import open_new as web_open
 from requests import get as requests_get
 from requests import post as requests_post
 from os import remove as os_remove
 from json import loads as json_loads
-sys_path.append(os_path_dirname(os_path_realpath(__file__)))
+from os import name as oscore
+sys_path.append(os_path_dirname(__file__))
 import log_core as log
-from language_core import languageC,cdatabase
+from language_core import languageC,globalLanguage,cdatabase,switchLanguage
 from backup_core import Backup,Import
 # project: GitHub Tools Core
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w24b
+# version: 22w30a
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -37,7 +38,8 @@ basic = None
 ver = None
 feedbackInfo = [0,None]
 clearTokenInfo = 0
-def loadB():
+def loadB() -> None:
+    "Load basic information from database"
     global basic
     global ver
     global clearTokenInfo
@@ -47,16 +49,12 @@ def loadB():
     cur.execute('select * from data')
     cache = cur.fetchone()
     ver = cache[6]
-    basic = [cache[2],cache[3],cache[4],cache[5],cache[13]]
+    basic = [cache[2],cache[3],cache[4],cache[5],cache[13],cache[1]]
     clearTokenInfo = cache[11]
     cur.close()
     con.close()
     log.info('Database closed')
 loadB()
-if basic[4] == 0:
-    log.basic(0)
-else:
-    log.basic(1)
 log.info('Version:' + ver)
 log.info('Load basic information')
 # Record Login State
@@ -65,14 +63,15 @@ loginV = 0
 g = None
 user = None
 l = None
-# A Language Class
+# Load Language
+language = globalLanguage()
+languageData = language.reload()
 language = languageC()
-# WARN!Try To Use Language Function,Please Use Reload Function First!Otherwise,Will Error!
-# And If You Change Language,Please Restart Or Use Reload Function!
-language.reload()
+language.reload(*languageData)
 log.info('Load language module')
 # Space Data Function
-def par(data2):
+def par(data2:str) -> list:
+    "If I see space, I will cut it =|"
     data = data2 + ' '
     turn = []
     cache = ''
@@ -84,10 +83,12 @@ def par(data2):
             cache += data[i]
     return turn
 # Get Start To -1's Text
-def get(start,text):
+def get(start:int,text:str) -> str:
+    "Hmm...Don't use it"
     return text[start:]
 # About
-def githut(data):
+def githut(data:str) -> None:
+    "Get about info"
     if data == '':
         print(language.githutH)
         log.info('Showed help information')
@@ -130,7 +131,8 @@ def githut(data):
         print(language.cerror)
         log.warning('Command not found')
 # Config Language And Token
-def config(data):
+def config(data:str) -> None:
+    "Config anythings, except can't config things"
     global clearTokenInfo
     if data == '':
         # Helper
@@ -182,25 +184,41 @@ def config(data):
     # Config Language
     elif data[:8] == 'language':
         if data.strip() != 'language':
-            cache = get(9,data)
-            con = sqlite3.connect('.mwl-githut-data.db')
-            log.info('Connected to database')
-            cur = con.cursor()
-            # Search Language List
-            if cache in language.lList:
-                cur.execute("UPDATE data SET language='" + cache + "' WHERE id=1")
-                con.commit()
-                log.info('Change database:language;{}'.format(cache))
+            if data[9:] in ['-u','--update']:
+                log.info('Connect database')
+                con = sqlite3.connect('.mwl-githut-data.db')
+                cur = con.cursor()
+                cur.execute('SELECT * FROM data')
+                cache = cur.fetchone()[1]
+                cur.close()
+                con.close()
+                log.info('Closed database')
+                switchLanguage(cache,1)
+            elif data[9:] != 'en-us':
+                cache = switchLanguage(data[9:])
+                if cache['code'] == 200:
+                    print('[SUCCESS]' + cache['message'])
+                else:
+                    print('[ERROR]' + cache['message'])
             else:
-                print(language.cerror)
-                log.warning('Could\'t change language')
-            language.reload()
-            cur.close()
-            con.close()
-            log.info('Database closed')
+                con = sqlite3.connect('.mwl-githut-data.db')
+                cur = con.cursor()
+                cur.execute("UPDATE data SET language='en-us' WHERE id=1")
+                con.commit()
+                cur.close()
+                con.close()
+                print('[SUCCESS]Updated language')
         else:
-            print(language.cerror)
-            log.warning('Command not found')
+            if oscore == 'nt':
+                cache = 'libs\\language-packages-cache\\info.json'
+            else:
+                cache = 'libs/language-packages-cache/info.json'
+            print('Name: {}'.format(language.languagePackageInformation[0]))
+            print('Date: {}'.format(language.languagePackageInformation[1]))
+            print('Author: {}'.format(language.languagePackageInformation[2]))
+            print('Broken: {}'.format(language.languagePackageInformation[3]))
+            print('Website: {}'.format(language.languagePackageInformation[4]))
+            print('Language: {}'.format(language.languagePackageInformation[5]))
     # Config Autologin
     elif data[:9] == 'autologin':
         cache = get(10,data)
@@ -307,6 +325,9 @@ def config(data):
         else:
             print(language.cerror)
             log.warning('Command not found')
+        cur.close()
+        con.close()
+        log.info('Closed database')
     # Auto Check Update
     elif data[:6] == 'update':
         cache = get(7,data)
@@ -336,6 +357,8 @@ def config(data):
                 else:
                     print(language.NacuN)
                     log.warning('Canceled change auto check update enable state')
+        cur.close()
+        con.close()
     # Update Server
     elif data[:3] == 'UPS' and data.strip() != 'UPS':
         cache = get(4,data)
@@ -348,36 +371,22 @@ def config(data):
             print(language.cerror)
         cur.close()
         con.close()
-    # Debug Mode
-    elif data[:5] == 'debug':
-        cache = get(6,data)
+    elif data[:3] == 'LPS':
+        cache = get(4,data)
         con = sqlite3.connect('.mwl-githut-data.db')
+        log.info('Connected to database')
         cur = con.cursor()
-        if cache in ['-y','--yes','-n','--no']:
-            if cache == '-y' or cache == '--yes':
-                if basic[4] == 0:
-                    cur.execute("UPDATE data SET debug=1 WHERE id=1")
-                    con.commit()
-                    log.info('Change database:debug-mode;ON')
-                    print(language.debugY)
-                    log.info('Enable debug mode now')
-                else:
-                    log.warning('Canceled change debug mode enable state')
-            else:
-                if basic[4] == 1:
-                    cur.execute("UPDATE data SET debug=0 WHERE id=1")
-                    con.commit()
-                    log.info('Change database:debug-mode;OFF')
-                    print(language.debugN)
-                    log.info('Disable debug mode now')
-                else:
-                    log.warning('Canceled change debug mode enable state')
+        cur.execute("UPDATE data SET language_packages_link='{}' WHERE id=1".format(cache))
+        con.commit()
+        cur.close()
+        con.close()
     # Command Error
     else:
         print(language.cerror)
         log.warning('Command not found')
 # Set Account Type
-def account(data):
+def account(data:str) -> None:
+    "Will report an error"
     # Helper
     if data == '':
         print(language.accountH)
@@ -401,7 +410,8 @@ def account(data):
     else:
         print(language.cerror)
 # Login
-def loginF():
+def loginF() -> None:
+    "Login to GitHub"
     # Global
     global g
     global user
@@ -437,7 +447,8 @@ def loginF():
             loginV = 1
             log.info('Logined to GitHub')
 # Rebuild Database
-def redata():
+def redata() -> None:
+    "Rebuild database"
     global basic
     global loginV
     os_remove('.mwl-githut-data.db')
@@ -448,7 +459,8 @@ def redata():
     loginV = 0
     log.info('Rebuild database')
 # Create Repository
-def crepo(data):
+def crepo(data:str) -> None:
+    "Create repository"
     if loginV == 1:
         # Create Repo
         try:
@@ -470,7 +482,8 @@ def crepo(data):
         drepo(data)
         log.info('Create repository:develop mode - delete repository')
 # Delete Repository
-def drepo(data):
+def drepo(data:str) -> None:
+    "Delete repository"
     if loginV == 1:
         # Delete Repo
         try:
@@ -493,18 +506,19 @@ def drepo(data):
         crepo(data)
         log.info('Delete repository:develop mode - create repository')
 # Create Token
-def ctoken(data):
+def ctoken(data:str) -> None:
     pass
 # Feedback
-def feedback(jump=0):
+def feedback(jump:int=0) -> None:
+    "Feedback to us or others team"
     global feedbackInfo
-    def checkIP(ip):
+    def checkIP(ip:str) -> bool:
         ip_ver = ipv(ip)
         if ip_ver.version == 6:
             return True
         else:
             return False
-    def domainNotHttp(domain):
+    def domainNotHttp(domain:str) -> str:
         domainList = domain.split('/')
         if domainList[1] == '':
             return domainList[2]
@@ -630,16 +644,19 @@ def feedback(jump=0):
         print(language.feedbackServerClose)
         log.warning('Feedback server is closed')
 # Backup
-def backupF():
+def backupF() -> None:
+    "Backup all database"
     backup = Backup()
     backup.save()
 # Import Backup File
-def importF():
+def importF() -> None:
+    "Read backup file, then replace database, use file's texts"
     cache = Import()
     if cache.isBackup == 0:
         cache.replace()
 # Get Notice
-def notice():
+def notice() -> None:
+    "Get our notice"
     # Get notice
     try:
         cache = requests_get('https://githut.macwinlin.ml/notice.json').text
@@ -697,7 +714,8 @@ def notice():
         for i in range(len(noticeLvU)):
             print('{} | {}'.format(*noticeLvU[i]))
 # Run Command
-def run(data):
+def run(data:str) -> None:
+    "Not use any, only want a command :)"
     if data == 'help':
         print(language.help)
         log.info('Showed Help')
@@ -763,11 +781,14 @@ def run(data):
             log.warning('Command not found')
     elif data == 'notice':
         notice()
+    elif data in ['exit','quit']:
+        sys_exit(0)
     else:
         print("'{}'".format(data) + language.notc)
         log.warning('Command not found')
 # Exit
-def clearToken():
+def clearToken() -> None:
+    "Change database to clear it"
     if clearTokenInfo == 1:
         con = sqlite3.connect('.mwl-githut-data.db')
         cur = con.cursor()
