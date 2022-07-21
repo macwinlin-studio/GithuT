@@ -11,8 +11,6 @@ from hashlib import sha256
 from zipfile import ZipFile
 from shutil import rmtree
 from platform import platform
-
-from colorama import Back
 path.append(dirname(realpath(__file__)))
 from language_core import globalLanguage,BackupLanguage
 import log_core as log
