@@ -39,9 +39,40 @@ OK,if you want to rewrite shell,[contact us](mailto:githut@macwinlin.ml)!
 
 Really,we want Language Core to include more languages.
 
-So you can modify language core and publish to anymore!
+~~So you can modify language core and publish to anymore!~~
 
-Then send new core to [us](mailto:githut@macwinlin.ml)!
+After [22w30a](https://github.com/macwinlin-studio/GithuT/releases/tag/22w30a), please don't change language core to add new language. Please make a language package.
+
+Simplified Chinese language package from MacWinLin Studio CGK Team.
+
+Now use `config language zh-cn` in GithuT 22w30a and after, language core will get Simplified Chinese from GitHub Pages.
+
+#### How to make a language package?
+
+First, we want two JSON files: *all-language.json* and *info.json*
+
+*all-language.json*'s text like this:
+
+```json
+{"backup":{"key":"text","key","text"},"update":{"key":"text","key":text"},"main":{"key":"text","key":"text"}}
+```
+
+*key* is variable name, and *text* is translated text.
+
+---
+
+*info.json*'s text like this:
+```json
+{"name":"GitHub Tools ??? Language Package","date":"modify time","author":"your team name","website":"githut.macwinlin.ml","language":"??-??"}
+```
+
+Then you can put files to your web server to start server, or share to others.
+
+##### Why not use .zip file?
+
+Why we not use .zip file to make language package, like backup file?
+
+Oh, I want to use .zip file, too. But at 22w30a finished, we are testing, but in Python Package ZipFile extracting .zip file, program report an error to us. It can't extracting Unicode word, so we not use .zip file to make language package.
 
 ### GitHub Tools Main Core
 
