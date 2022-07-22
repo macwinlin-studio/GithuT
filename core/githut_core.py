@@ -1,5 +1,7 @@
 # coding=utf-8
 import sqlite3
+from uuid import uuid3 as uuid
+from uuid import NAMESPACE_DNS as uuid_NAMESPACE_DNS
 from hashlib import sha256
 from atexit import register
 from ipaddress import ip_address as ipv
@@ -22,7 +24,7 @@ from backup_core import Backup,Import
 # file: githut_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w30a
+# version: 22w30b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 # This is core,if you try to make a unofficial GUI client,please not view gui/shell's codes.Maybe you will view many bugs.
@@ -69,6 +71,9 @@ languageData = language.reload()
 language = languageC()
 language.reload(*languageData)
 log.info('Load language module')
+def confirmCore() -> list:
+    "Confirm whether is GithuT core, and return uuid"
+    return [True,str(uuid(uuid_NAMESPACE_DNS,basic[4]))]
 # Space Data Function
 def par(data2:str) -> list:
     "If I see space, I will cut it =|"
@@ -651,7 +656,11 @@ def backupF() -> None:
 # Import Backup File
 def importF() -> None:
     "Read backup file, then replace database, use file's texts"
-    cache = Import()
+    if oscore == 'nt':
+        path = input(language.path_windows)
+    else:
+        path = input(language.path)
+    cache = Import(path)
     if cache.isBackup == 0:
         cache.replace()
 # Get Notice
@@ -719,6 +728,10 @@ def run(data:str) -> None:
     if data == 'help':
         print(language.help)
         log.info('Showed Help')
+    elif data == 'where':
+        tml = input('Develop text, read-only, confirm?(y/n)')
+        if tml in ['y','Y']:
+            print(__file__)
     elif data[:6] == 'config':
         if data == 'config':
             config('')

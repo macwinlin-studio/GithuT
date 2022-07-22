@@ -4,7 +4,6 @@ from os.path import isfile as os_path_isfile
 from os.path import isdir as os_path_isdir
 from os.path import exists as os_path_exists
 from os import rmdir as os_rmdir
-from platform import platform
 from os import popen as os_popen
 from requests import get as requests_get
 from json import loads as json_loads
@@ -13,13 +12,15 @@ from os import remove as os_remove
 from os import mkdir as os_mkdir
 from sys import path as sys_path
 from os.path import dirname as os_path_dirname
+from random import randint as random_randint
+from random import sample as random_sample
 sys_path.append(os_path_dirname(__file__))
 import log_core as log
 # project: GitHub Tools Language Core
 # file: language_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w30a
+# version: 22w30b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -40,12 +41,16 @@ def cdatabase() -> None:
     "Create a new database"
     con = sqlite3.connect('.mwl-githut-data.db')
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w30a',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update',will_delete_at_next_change_database INTEGER NOT NULL DEFAULT 0,language_packages_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/language-packages')")
-    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w30a',1,0,'123456','https://githut.macwinlin.ml',0,'https://githut.macwinlin.ml/update',0,'https://githut.macwinlin.ml/language-packages')")
+    uuid = random_sample('1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm',random_randint(5,8))
+    uuid_str = ''
+    for i in range(len(uuid)):
+        uuid_str += uuid[i]
+    cur.execute("CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY,language TEXT NOT NULL DEFAULT 'en-us',htoken INTEGER NOT NULL DEFAULT 0,token TEXT,alogin INTEGER NOT NULL DEFAULT 0,developM INTEGER NOT NULL DEFAULT 0,version TEXT NOT NULL DEFAULT 'a0.2-22w30b',updateT INTEGER NOT NULL DEFAULT 1,feedback INTEGER NOT NULL DEFAULT 0,feedback_admin TEXT,feedback_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/feedback.json',clearToken INTEGER NOT NULL DEFAULT 0,ups TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/update',uuid TEXT,language_packages_link TEXT NOT NULL DEFAULT 'https://githut.macwinlin.ml/language-packages')")
+    cur.execute("INSERT INTO data values (1,'en-us',0,'123456',0,0,'a0.2-22w30b',1,0,'123456','https://githut.macwinlin.ml',0,'https://githut.macwinlin.ml/update','{}','https://githut.macwinlin.ml/language-packages')".format(uuid_str))
     con.commit()
     cur.close()
     con.close()
-    if 'Windows' in platform():
+    if oscore == 'nt':
         os_popen('attrib +H .mwl-githut-data.db')
 # Define Read Database
 def rdatabase() -> list:
@@ -64,6 +69,7 @@ def linesText(texts: list) -> str:
         cache += texts[i + 1]
         if (i + 2) != len(texts):
             cache += '\n'
+    return cache
 # Switch Language
 def switchLanguage(language: str,update=0) -> dict:
     "Switch language, download from packages server"
@@ -241,8 +247,10 @@ Use globalLanguage to get parameter first."""
             self.noticeLv1 = jsonDict['noticeLv1']
             self.noticeLv2 = jsonDict['noticeLv2']
             self.noticeLv3 = jsonDict['noticeLv3']
+            self.path = jsonDict['path']
+            self.path_windows = jsonDict['path_windows'] + 'D:\\GithuT\\backup-2022-7-19-304885.backup)'
         else:
-            self.languagePackageInformation = ['GitHub Tools English Language Package','2022-07-20','MacWinLin Studio CGK Team','No','githut.macwinlin.ml','en-us']
+            self.languagePackageInformation = ['GitHub Tools English Language Package','2022-07-21','MacWinLin Studio CGK Team','No','githut.macwinlin.ml','en-us']
             if broken:
                 self.languagePackageInformation[3] = 'Yes'
             # About Program Part
@@ -362,6 +370,9 @@ repo <RepoName>    Delete GitHub Repository'''
             self.noticeLv1 = 'Level 1 notice:'
             self.noticeLv2 = 'Level 2 notice:'
             self.noticeLv3 = 'Level 3 notice:'
+            # Import
+            self.path = 'Please enter backup file path:(e.g. /home/githut/GithuT/backup-2022-4-23-305931.backup)'
+            self.path_windows = 'Please enter backup file path:(e.g. D:\\GithuT\\backup-2022-7-19-304885.backup)'
 class BackupLanguage():
     "Language class for backup core, please use reload function to load language first, won't auto load"
     def reload(self,otherLanguage:bool=False,broken:bool=False,jsonDict:dict={},infoDict:dict={}) -> None:
@@ -374,8 +385,6 @@ Use globalLanguage(type:backup) to get parameter first"""
             self.filename = jsonDict['filename']
             self.errorInfo = jsonDict['errorInfo']
             self.openE = jsonDict['openE']
-            self.path = jsonDict['path']
-            self.path_windows = jsonDict['path_windows'] + 'D:\\GithuT\\backup-2022-7-19-304885.backup)'
             self.pathE = jsonDict['pathE']
             self.isBackup = jsonDict['isBackup']
             self.structrue = jsonDict['structrue']
@@ -396,7 +405,7 @@ Use globalLanguage(type:backup) to get parameter first"""
             self.importE = jsonDict['importE']
             self.lenE = jsonDict['lenE']
         else:
-            self.languagePackageInformation = ['GitHub Tools English Language Package','2022-07-20','MacWinLin Studio CGK Team','No','githut.macwinlin.ml','en-us']
+            self.languagePackageInformation = ['GitHub Tools English Language Package','2022-07-21','MacWinLin Studio CGK Team','No','githut.macwinlin.ml','en-us']
             if broken:
                 self.languagePackageInformation[3] = 'Yes'
             self.replace = 'Do you want to replace the previous?(y/n)'
@@ -404,7 +413,6 @@ Use globalLanguage(type:backup) to get parameter first"""
             self.filename = 'Save successfully.File:'
             self.errorInfo = 'Error Info:'
             self.openE = 'Open backup file error!'
-            self.path = 'Please enter backup file path:(e.g. /home/githut/GithuT/backup-2022-4-23-305931.backup)'
             self.pathE = 'Path error,please enter right path!'
             self.backupC = 'Backup was cancelled.'
             self.canOpen = '√  The backup file can open.'

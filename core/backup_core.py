@@ -6,7 +6,6 @@ from random import randint
 from os.path import realpath,dirname,exists,isfile,abspath
 from sys import path
 from os import remove,mkdir,rename
-from os import name as oscore
 from hashlib import sha256
 from zipfile import ZipFile
 from shutil import rmtree
@@ -18,7 +17,7 @@ import log_core as log
 # file: backup_core.py
 # author: MacWinLin Studio CGK Team
 # email: githut@macwinlin.ml
-# version: 22w30a
+# version: 22w30b
 # Publish only on GitHub and MacWinLin Studio's GitLab.
 # Copyright 2022 MacWinLin Studio.All rights reserved.
 
@@ -31,14 +30,14 @@ language = BackupLanguage()
 # Backup Database
 class Backup():
     "Backup all database"
-    def __init__(self):
+    def __init__(self) -> None:
         # Read data
         con = sqlite3.connect('.mwl-githut-data.db')
         log.info('Connect to database')
         cur = con.cursor()
         cur.execute("select * from data")
         cache = cur.fetchone()
-        cache2 = {'ver':1.3,'data':[*cache[1:6],'a0.2-22w30a',cache[7:]]}
+        cache2 = {'ver':1.3,'data':[*cache[1:6],'a0.2-22w30b',cache[7:]]}
         # JSON
         self.backup = dumps(cache2)
         date = time_date.today()
@@ -46,7 +45,7 @@ class Backup():
         cur.close()
         con.close()
         log.info('Database closed')
-    def save(self):
+    def save(self) -> None:
         "Save backup file to hard disk"
         log.info('Saving backup file')
         language.reload(*languageData)
@@ -152,14 +151,11 @@ class Backup():
 # Import Backup File To Database
 class Import():
     "Import backup file, then replace database"
-    def __init__(self):
+    def __init__(self,pathFromOther:str) -> None:
         language.reload(*languageData)
         log.info('Load language module')
         # Backup File Path
-        if oscore == 'nt':
-            self.path = input(language.path_windows)
-        else:
-            self.path = input(language.path)
+        self.path = pathFromOther
         log.info('Got backup file path')
         # Open Backup File
         if self.path[-7:] == '.backup':
@@ -188,7 +184,7 @@ class Import():
             print(language.pathE)
             self.isBackup = 1
             log.error('Backup file suffix is .backup')
-    def replace(self):
+    def replace(self) -> None:
         "Replace database"
         # File number
         if not len(self.zipN) == 2:
@@ -278,7 +274,7 @@ class Import():
                     if len(data) == 12:
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30a',{},{},'{}','{}',{},'{}',{},'{}')".format(*data)
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30b',{},{},'{}','{}',{},'{}',{},'{}')".format(*data)
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:
@@ -302,7 +298,7 @@ class Import():
                         cache = cur.fetchone()
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30a',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[9:])
+                            cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30b',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[9:])
                             cur.execute(cache)
                             con.commit()
                         except Exception as e:
@@ -326,7 +322,7 @@ class Import():
                     if len(data) == 7:
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30a',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[8:])
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30b',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[8:])
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:
@@ -351,7 +347,7 @@ class Import():
                         try:
                             cur.execute("DELETE FROM data WHERE id=1")
                             cache = ''
-                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30a',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[7:])
+                            sql_cache = "INSERT INTO data values (1,'{}',{},'{}',{},{},'a0.2-22w30b',{},{},'{}','{}',{},'{}',{},'{}')".format(*data,cache[7:])
                             cur.execute(sql_cache)
                             con.commit()
                         except Exception as e:

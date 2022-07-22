@@ -25,7 +25,7 @@ If you try to develop GUI application,please use this project's core.But you can
 
 And if you use our core,please contact [githut@macwinlin.ml](mailto:githut@macwinlin.ml)!
 
-And if you(or your team)'s project is very fantastic,we will add your project to official GUI application list(will write author).
+And if your(or your team's) project is very fantastic,we will add your project to official GUI application list(will write author).
 
 ### GitHub Tools Shell Application
 
@@ -54,7 +54,7 @@ First, we want two JSON files: *all-language.json* and *info.json*
 *all-language.json*'s text like this:
 
 ```json
-{"backup":{"key":"text","key","text"},"update":{"key":"text","key":text"},"main":{"key":"text","key":"text"}}
+{"backup":{"key":"text","key":"text"},"update":{"key":"text","key":text"},"main":{"key":"text","key":"text"}}
 ```
 
 *key* is variable name, and *text* is translated text.
@@ -70,9 +70,17 @@ Then you can put files to your web server to start server, or share to others.
 
 ##### Why not use .zip file?
 
-Why we not use .zip file to make language package, like backup file?
+Why we not use *.zip* file to make language package, like backup file?
 
-Oh, I want to use .zip file, too. But at 22w30a finished, we are testing, but in Python Package ZipFile extracting .zip file, program report an error to us. It can't extracting Unicode word, so we not use .zip file to make language package.
+Oh, I want to use *.zip* file, too. But at 22w30a finished, we are testing, but at Python Package ZipFile extracting *.zip* file, program report an error. It can't extracting Unicode word, so we not use *.zip* file to make language package.
+
+##### So why not use .tar file?
+
+*.zip* can't use, we see another file:*.tar* file. But we don't know how to extract *.tar* or *.tar.gz* file, and 22w30a snapshot is finished, we use 5 days to make others function, now is Thursday, if we don't published, 22w30a will become 22w31a.
+
+We are don't update this project 5 weeks, 22w25a is newer version before 22w30a.
+
+Maybe we will use *.tar* or *.tar.gz* file after.
 
 ### GitHub Tools Main Core
 
